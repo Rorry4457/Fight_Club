@@ -52,11 +52,11 @@
         android:text="@string/step_two" />
 
     <Button
-        android:id="@+id/btn_schedule"
+        android:id="@+id/btn_accessibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/set_time"
+        android:text="@string/open_accessibility"
         android:textAllCaps="false" />
 
     <View
@@ -70,11 +70,11 @@
         android:text="@string/step_three" />
 
     <Button
-        android:id="@+id/btn_accessibility"
+        android:id="@+id/btn_schedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/open_accessibility"
+        android:text="@string/set_time"
         android:textAllCaps="false" />
 
     <View
