@@ -10,32 +10,70 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.auto.auto.MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/step_one" />
 
     <EditText
         android:id="@+id/phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:hint="@string/phone_number"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        android:inputType="phone"
+        android:maxLines="1" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:hint="@string/password"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        android:inputType="textVisiblePassword"
+        android:maxLines="1" />
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/save_login_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/save_login_info"
+        android:textAllCaps="false" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:layout_margin="@dimen/activity_vertical_margin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/step_two" />
+
+    <Button
+        android:id="@+id/btn_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="@string/set_time"
         android:textAllCaps="false" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:layout_margin="@dimen/activity_vertical_margin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/step_three" />
+
     <Button
-        android:id="@+id/btn_1"
+        android:id="@+id/btn_accessibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="@string/open_accessibility"
         android:textAllCaps="false" />
 
@@ -48,11 +86,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rule_one"
-        android:textSize="10sp"/>
+        android:textSize="10sp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rule_two"
-        android:textSize="10sp"/>
+        android:textSize="10sp" />
 
 </LinearLayout>

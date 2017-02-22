@@ -26,6 +26,8 @@ public class Constant {
     //key
     public static final String PHONE = "com.your.phone.number";
     public static final String PASSWORD = "com.your.password";
+    public static final String SETTING = "com.android.settings";
+    public static final String SCHEDULE = "com.android.timerswitch";
 
     //sharePreference
     public static final String SHARE_PREFERENCE = "com.login.share.preference";

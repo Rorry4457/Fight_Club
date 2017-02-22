@@ -10,11 +10,15 @@ import android.util.Log;
 
 import com.auto.auto.Constant;
 
+import java.util.Random;
+
 /**
  * Created by x on 2016/11/2.
  */
 public class BootReceiver extends BroadcastReceiver {
     public static String TAG = BootReceiver.class.getSimpleName();
+    private static int MAX_DELAY = 10 * 60 * 1000;
+    private static int MIN_DELAY = 3 * 60 * 1000;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -24,7 +28,7 @@ public class BootReceiver extends BroadcastReceiver {
         wakeUpAndUnlock(context);
     }
 
-    private static void wakeUpAndUnlock(Context context) {
+    private static void wakeUpAndUnlock(final Context context) {
         KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
         //解锁
@@ -38,20 +42,38 @@ public class BootReceiver extends BroadcastReceiver {
         //释放
         wl.release();
 
-        KeyguardManager keyguardManager = (KeyguardManager)context.getSystemService(context.KEYGUARD_SERVICE);
+        KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(context.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("");
         keyguardLock.disableKeyguard();
 
-        openDingDing(context);
+
+        Random random = new Random();
+        final int delay = random.nextInt(MAX_DELAY) % (MAX_DELAY - MIN_DELAY + 1) + MIN_DELAY;
+        System.out.println("delay = " + delay / 60000 + "mins" + delay % 60000 / 1000 + "sec");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    System.out.println("BootReceiver.run before");
+                    Thread.sleep(delay);
+                    System.out.println("BootReceiver.run after");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                openDingDing(context);
+            }
+        }).start();
     }
+
 
     private static void openDingDing(Context context) {
 
         if (isAppInstalled(context, Constant.DING_PACKAGE_NAME)) {
-            System.out.println("AlarmReceiver.openDingDing");
+            System.out.println("BootReceiver.openDingDing");
             context.startActivity(context.getPackageManager().getLaunchIntentForPackage(Constant.DING_PACKAGE_NAME));
         } else {
-            System.out.println("AlarmReceiver.openDingDing" + "not installed Ding Ding");
+            System.out.println("BootReceiver.openDingDing + no isnstalled DingDing");
         }
     }
 

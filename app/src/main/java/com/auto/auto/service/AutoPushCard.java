@@ -21,28 +21,36 @@ public class AutoPushCard extends AccessibilityService {
 
     public static String TAG = AutoPushCard.class.getSimpleName();
     boolean isLoginOperate = false;
+    boolean isSetSchedul = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
 
-        System.out.println("AutoPushCard.onAccessibilityEvent");
-
         int eventType = accessibilityEvent.getEventType();
         String packageName = accessibilityEvent.getPackageName().toString();
-        System.out.println("packageName = " + packageName);
 
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             autoLoginOrScroll();
         } else if (eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
-            findAndCheckIn();
-        } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-
+            try {
+                findAndCheckIn();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.SETTING.equals(packageName)) {
+            openScheduleSetting();
         }
     }
 
+    // TODO: 2017/2/22 逻辑要修正 待下一期需求
     private void openScheduleSetting() {
-
+        if (!isSetSchedul) {
+            AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
+            AccessibilityNodeInfo scheduled = rootInActiveWindow.getChild(1).getChild(13);
+            scheduled.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            isSetSchedul = true;
+        }
     }
 
     private void findAndCheckIn() {
@@ -57,16 +65,6 @@ public class AutoPushCard extends AccessibilityService {
                 if (child.getClassName().equals("android.widget.TextView") && child.getText().equals("考勤打卡")) {
                     Log.d(TAG, " 找到了 考勤打卡的 item  点击进入打卡页面");
                     info.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//                                Thread.sleep(4000);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }).start();
                     break;
                 }
             }
@@ -116,7 +114,7 @@ public class AutoPushCard extends AccessibilityService {
             System.out.println("Input login password");
 
             AccessibilityNodeInfo password = pwdEt.get(0);//设置登录密码
-            setText(password, sharedPreferences.getString(Constant.PASSWORD,"110011001100"));
+            setText(password, sharedPreferences.getString(Constant.PASSWORD, "110011001100"));
 
             System.out.println("Start Login");
 
