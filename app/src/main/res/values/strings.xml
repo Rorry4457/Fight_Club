@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Fight_Club</string>
+    <string name="phone_number">PhoneNum</string>
+    <string name="password">Password</string>
+    <string name="set_time">Set_Time</string>
+    <string name="open_accessibility">Open Accessibility</string>
+    <string name="rule_one">1st RULE: You do not talk about FIGHT CLUB.</string>
+    <string name="rule_two">2nd RULE: You DO NOT talk about FIGHT CLUB.</string>
+</resources>
