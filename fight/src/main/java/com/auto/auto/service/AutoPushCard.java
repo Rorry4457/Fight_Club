@@ -12,6 +12,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.auto.auto.Constant;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -22,6 +25,10 @@ public class AutoPushCard extends AccessibilityService {
     public static String TAG = AutoPushCard.class.getSimpleName();
     boolean isLoginOperate = false;
     boolean isSetSchedul = false;
+    private static int IN_Y_COORDINATES = 600;
+    private static int OUT_Y_COORDINATES = 890;
+    private static int CENTER_X_COORDINATES = 360;
+    private static boolean isWebPageOpened = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -32,9 +39,9 @@ public class AutoPushCard extends AccessibilityService {
 
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             autoLoginOrScroll();
-        } else if (eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
+        } else if (eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             try {
-                findAndCheckIn();
+                openCheckInPage();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -53,10 +60,14 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
-    private void findAndCheckIn() {
-        //监听页面滑动
+    private void openCheckInPage() {
+
+        if (isWebPageOpened) {
+            return;
+        }
+
+        isWebPageOpened = true;
         if (findNodeById(Constant.WORK_LAYOUT).size() > 0) {
-            Log.d(TAG, " 进入 考勤打卡模块");
             List<AccessibilityNodeInfo> itemList = findNodeById(Constant.WORK_LAYOUT_ITEM);
 
             // 找出考勤打卡的模块
@@ -65,9 +76,157 @@ public class AutoPushCard extends AccessibilityService {
                 if (child.getClassName().equals("android.widget.TextView") && child.getText().equals("考勤打卡")) {
                     Log.d(TAG, " 找到了 考勤打卡的 item  点击进入打卡页面");
                     info.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    break;
+                    waitUntilCheckOut();
+                    return;
                 }
             }
+        }
+    }
+
+    private void checkIn() {
+        System.out.println("AutoPushCard.checkIn");
+        String[] checkInOrder = {"input", "tap", "" + CENTER_X_COORDINATES, "" + IN_Y_COORDINATES};
+
+        try {
+            new ProcessBuilder(checkInOrder).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void checkOut() throws IOException {
+        System.out.println("AutoPushCard.checkOut");
+
+
+//        AccessibilityNodeInfo btn = findNodeById(Constant.WEB_VIEW).get(1).getChild(0).getChild(0).getChild(4).getChild(2).getChild(3);
+//        System.out.println("btn = " + btn.getContentDescription());
+//        boolean success = btn.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+//        System.out.println("success = " + success);
+//        for (AccessibilityNodeInfo button :
+//                buttons) {
+//            button.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+//            System.out.println("button.getContentDescription() = " + button.getContentDescription());
+//        }
+
+//
+//        final String checkOutOrder = "input tap " + CENTER_X_COORDINATES + " " + OUT_Y_COORDINATES;
+//        System.out.println("checkOutOrder = " + checkOutOrder);
+//
+//        ShellUtils.CommandResult result = ShellUtils.execCommand(checkOutOrder, false);
+//        System.out.println("result = " + result.errorMsg);
+//        Runtime.getRuntime().exec(checkOutOrder);
+
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }).start();
+
+
+//        Process p = Runtime.getRuntime().exec(checkOutOrder);
+//        String data = null;
+//        BufferedReader ie = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+//        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//        String error = null;
+//        while ((error = ie.readLine()) != null
+//                && !error.equals("null")) {
+//            data += error + "\n";
+//        }
+//        String line = null;
+//        while ((line = in.readLine()) != null
+//                && !line.equals("null")) {
+//            data += line + "\n";
+//        }
+//
+//        Log.v("ls", data);
+//        ShellUtils shellUtils = new ShellUtils();
+//        try {
+//            Runtime.getRuntime().exec(checkOutOrder);
+//            shellUtils.start();
+//            shellUtils.execCommand(checkOutOrder);
+//            shellUtils.stop();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    protected static boolean haveRoot() {
+
+        int i = execRootCmdSilent("echo test"); // 通过执行测试命令来检测
+        if (i != -1) {
+            return true;
+        }
+        return false;
+    }
+
+    protected static int execRootCmdSilent(String paramString) {
+        try {
+            Process localProcess = Runtime.getRuntime().exec("su");
+            Object localObject = localProcess.getOutputStream();
+            DataOutputStream localDataOutputStream = new DataOutputStream(
+                    (OutputStream) localObject);
+            String str = String.valueOf(paramString);
+            localObject = str + "\n";
+            localDataOutputStream.writeBytes((String) localObject);
+            localDataOutputStream.flush();
+            localDataOutputStream.writeBytes("exit\n");
+            localDataOutputStream.flush();
+            localProcess.waitFor();
+            int result = localProcess.exitValue();
+            return (Integer) result;
+        } catch (Exception localException) {
+            localException.printStackTrace();
+            return -1;
+        }
+    }
+
+    private boolean isRoot(){
+        try
+        {
+            Process pro = Runtime.getRuntime().exec("su");
+            pro.getOutputStream().write("exit\n".getBytes());
+            pro.getOutputStream().flush();
+            int i = pro.waitFor();
+            if(0 == i){
+                pro = Runtime.getRuntime().exec("su");
+                return true;
+            }
+
+        } catch (Exception e)
+        {
+            return false;
+        }
+        return false;
+
+    }
+
+    private void waitUntilCheckOut() {
+        try {
+            String description = findNodeById(Constant.WEB_VIEW).get(1).getChild(0).getChild(0).getChild(4).getChild(2).getChild(3).getContentDescription().toString();
+            if (description.equals("下班打卡")) {
+                checkOut();
+            }
+        } catch (Exception e) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("wait 1 second");
+                    try {
+                        Thread.sleep(1000);
+                        waitUntilCheckOut();
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+
+                }
+            }).start();
         }
     }
 
@@ -125,6 +284,7 @@ public class AutoPushCard extends AccessibilityService {
 
             AccessibilityNodeInfo layoutWork = findNodeById(Constant.TAB_BUTTON_WORK).get(0);
             layoutWork.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            isWebPageOpened = false;
         }
     }
 

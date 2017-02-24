@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText phoneNumber;
     private EditText password;
+    private EditText account;
+    private EditText accountPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         phoneNumber = (EditText) findViewById(R.id.phone_number);
         password = (EditText) findViewById(R.id.password);
+        account = (EditText) findViewById(R.id.account);
+        accountPassword = (EditText) findViewById(R.id.account_password);
 
         Button save = (Button) findViewById(R.id.save_login_info);
         save.setOnClickListener(new View.OnClickListener() {
@@ -58,11 +62,18 @@ public class MainActivity extends AppCompatActivity {
 
         String number = phoneNumber.getText().toString();
         String pass = password.getText().toString();
+        String ac = account.getText().toString();
+        String acPass = accountPassword.getText().toString();
 
         if (!TextUtils.isEmpty(number) && !TextUtils.isEmpty(pass)) {
 
             SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARE_PREFERENCE, Context.MODE_PRIVATE);
-            sharedPreferences.edit().putString(Constant.PHONE, number).putString(Constant.PASSWORD, pass).apply();
+            sharedPreferences.edit().putString(Constant.PHONE, number)
+                    .putString(Constant.PASSWORD, pass)
+                    .putString(Constant.ACCOUNT, ac)
+                    .putString(Constant.ACCOUNT_PASSWORD, acPass)
+                    .apply();
+
             Toast.makeText(this, "login info saved", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "no enough login info", Toast.LENGTH_SHORT).show();

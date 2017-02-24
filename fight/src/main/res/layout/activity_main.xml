@@ -19,7 +19,7 @@
         android:id="@+id/phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="8dp"
         android:hint="@string/phone_number"
         android:inputType="phone"
         android:maxLines="1" />
@@ -28,7 +28,25 @@
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/password"
+        android:inputType="textVisiblePassword"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/account"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/account_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:hint="@string/password"
         android:inputType="textVisiblePassword"
         android:maxLines="1" />

@@ -6,11 +6,13 @@ package com.auto.auto;
 public class Constant {
 
     public static final String DING_PACKAGE_NAME = "com.alibaba.android.rimet"; //钉钉的包名
+    public static final String CHROME_PACKAGE_NAME = "com.android.chrome";
     // 钉钉登录页面
     public static final String LOGIN_LAYOUT = "com.alibaba.android.rimet:id/sign_up_with_pwd_top_rl"; //登录界面root id
     public static final String LOGIN_PHONE_EDITTEXT = "com.alibaba.android.rimet:id/et_phone_input"; // 登录界面 手机号码输入框
     public static final String LOGIN_PASSWROD_EDITTEXT = "com.alibaba.android.rimet:id/et_pwd_login"; // 登录界面 手机号码输入框
     public static final String LOGIN_BTN = "com.alibaba.android.rimet:id/btn_next"; // 登录界面 登录按钮
+    public static final String WEB_VIEW = "com.alibaba.android.rimet:id/common_webview";
 
     // 钉钉主页
 
@@ -26,9 +28,14 @@ public class Constant {
     //key
     public static final String PHONE = "com.your.phone.number";
     public static final String PASSWORD = "com.your.password";
+    public static final String ACCOUNT = "com.your.auth.account";
+    public static final String ACCOUNT_PASSWORD = "com.your.auth.account.password";
     public static final String SETTING = "com.android.settings";
     public static final String SCHEDULE = "com.android.timerswitch";
 
     //sharePreference
     public static final String SHARE_PREFERENCE = "com.login.share.preference";
+
+    //authWeb Address
+    public static final String AUTH_ADDREDD = "http://192.168.30.111/webAuth/";
 }

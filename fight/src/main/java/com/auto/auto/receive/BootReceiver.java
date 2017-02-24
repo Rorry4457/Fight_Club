@@ -4,21 +4,31 @@ import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.PowerManager;
 import android.util.Log;
 
 import com.auto.auto.Constant;
+import com.auto.auto.ShellUtil.HttpUtil;
 
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by x on 2016/11/2.
  */
 public class BootReceiver extends BroadcastReceiver {
     public static String TAG = BootReceiver.class.getSimpleName();
-    private static int MAX_DELAY = 10 * 60 * 1000;
-    private static int MIN_DELAY = 3 * 60 * 1000;
+//    private static int MAX_DELAY = 10 * 60 * 1000;
+//    private static int MIN_DELAY = 3 * 60 * 1000;
+
+    private static int MAX_DELAY = 10 * 1000;
+    private static int MIN_DELAY = 5 * 1000;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -50,33 +60,52 @@ public class BootReceiver extends BroadcastReceiver {
         Random random = new Random();
         final int delay = random.nextInt(MAX_DELAY) % (MAX_DELAY - MIN_DELAY + 1) + MIN_DELAY;
         System.out.println("delay = " + delay / 60000 + "mins" + delay % 60000 / 1000 + "sec");
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    System.out.println("BootReceiver.run before");
                     Thread.sleep(delay);
-                    System.out.println("BootReceiver.run after");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
+                authIn(context);
                 openDingDing(context);
+
             }
         }).start();
     }
 
+    private static void authIn(Context context) {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARE_PREFERENCE, MODE_PRIVATE);
+        String account = sharedPreferences.getString(Constant.ACCOUNT, "000000");
+        System.out.println("account = " + account);
+        String accountPassword = sharedPreferences.getString(Constant.ACCOUNT_PASSWORD, "000000");
+        System.out.println("accountPassword = " + accountPassword);
+        System.out.println("BootReceiver.authIn");
+        Map<String, String> params = new HashMap<>();
+        params.put("username", account);
+        params.put("password", accountPassword);
+        params.put("pwd", accountPassword);
+        params.put("rememberPwd", "1");
+        params.put("secret", "true");
+
+        String strResult = HttpUtil.submitPostData(Constant.AUTH_ADDREDD, params, "utf-8");
+
+        Log.d("result ", strResult);
+    }
 
     private static void openDingDing(Context context) {
 
+        System.out.println("BootReceiver.openDingDing");
         if (isAppInstalled(context, Constant.DING_PACKAGE_NAME)) {
-            System.out.println("BootReceiver.openDingDing");
             context.startActivity(context.getPackageManager().getLaunchIntentForPackage(Constant.DING_PACKAGE_NAME));
         } else {
             System.out.println("BootReceiver.openDingDing + no isnstalled DingDing");
         }
     }
-
 
     private static boolean isAppInstalled(Context context, String packageName) {
         try {
