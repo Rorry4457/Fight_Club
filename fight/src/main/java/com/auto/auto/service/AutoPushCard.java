@@ -3,13 +3,13 @@ package com.auto.auto.service;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.auto.auto.Account;
 import com.auto.auto.Constant;
 
 import java.io.DataOutputStream;
@@ -187,20 +187,18 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
-    private boolean isRoot(){
-        try
-        {
+    private boolean isRoot() {
+        try {
             Process pro = Runtime.getRuntime().exec("su");
             pro.getOutputStream().write("exit\n".getBytes());
             pro.getOutputStream().flush();
             int i = pro.waitFor();
-            if(0 == i){
+            if (0 == i) {
                 pro = Runtime.getRuntime().exec("su");
                 return true;
             }
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
         return false;
@@ -262,18 +260,16 @@ public class AutoPushCard extends AccessibilityService {
             List<AccessibilityNodeInfo> phoneEt = findNodeById(Constant.LOGIN_PHONE_EDITTEXT);
             List<AccessibilityNodeInfo> pwdEt = findNodeById(Constant.LOGIN_PASSWROD_EDITTEXT);
             List<AccessibilityNodeInfo> loginBtn = findNodeById(Constant.LOGIN_BTN);
-            SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARE_PREFERENCE, MODE_PRIVATE);
-
-            System.out.println("Input login phone number");
+            Account account = Account.getAccountInfo(this);
 
             AccessibilityNodeInfo phone = phoneEt.get(0);
             phone.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            setText(phone, sharedPreferences.getString(Constant.PHONE, "110011001100"));
+            setText(phone, account.getPhoneNum());
 
             System.out.println("Input login password");
 
             AccessibilityNodeInfo password = pwdEt.get(0);//设置登录密码
-            setText(password, sharedPreferences.getString(Constant.PASSWORD, "110011001100"));
+            setText(password, account.getDingDingPassword());
 
             System.out.println("Start Login");
 
@@ -291,8 +287,7 @@ public class AutoPushCard extends AccessibilityService {
 
     public List<AccessibilityNodeInfo> findNodeById(String id) {
         AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
-        List<AccessibilityNodeInfo> findList = rootInActiveWindow.findAccessibilityNodeInfosByViewId(id);
-        return findList;
+        return rootInActiveWindow.findAccessibilityNodeInfosByViewId(id);
     }
 
     public void setText(AccessibilityNodeInfo node, String s) {

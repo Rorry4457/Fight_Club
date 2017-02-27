@@ -6,7 +6,6 @@ package com.auto.auto;
 public class Constant {
 
     public static final String DING_PACKAGE_NAME = "com.alibaba.android.rimet"; //钉钉的包名
-    public static final String CHROME_PACKAGE_NAME = "com.android.chrome";
     // 钉钉登录页面
     public static final String LOGIN_LAYOUT = "com.alibaba.android.rimet:id/sign_up_with_pwd_top_rl"; //登录界面root id
     public static final String LOGIN_PHONE_EDITTEXT = "com.alibaba.android.rimet:id/et_phone_input"; // 登录界面 手机号码输入框
@@ -26,12 +25,8 @@ public class Constant {
     public static final String WORK_LAYOUT_ITEM = "com.alibaba.android.rimet:id/oa_entry_inner_layout"; // 考勤打卡模块每一个小块的名称
 
     //key
-    public static final String PHONE = "com.your.phone.number";
-    public static final String PASSWORD = "com.your.password";
-    public static final String ACCOUNT = "com.your.auth.account";
-    public static final String ACCOUNT_PASSWORD = "com.your.auth.account.password";
+    public static final String ACCOUNT = "com.fight.club.account";
     public static final String SETTING = "com.android.settings";
-    public static final String SCHEDULE = "com.android.timerswitch";
 
     //sharePreference
     public static final String SHARE_PREFERENCE = "com.login.share.preference";

@@ -2,7 +2,7 @@
     <string name="app_name">Fight_Club</string>
     <string name="phone_number">PhoneNum</string>
     <string name="password">Password</string>
-    <string name="account">Account</string>
+    <string name="authAccount">Network Authorization Account</string>
     <string name="set_time">Set Schdule Boot Time</string>
     <string name="open_accessibility">Open Accessibility</string>
     <string name="step_one">First Step :</string>

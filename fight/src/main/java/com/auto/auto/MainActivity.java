@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +17,9 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private EditText phoneNumber;
-    private EditText password;
-    private EditText account;
-    private EditText accountPassword;
+    private EditText dindinPassword;
+    private EditText authAccount;
+    private EditText authAccountPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         phoneNumber = (EditText) findViewById(R.id.phone_number);
-        password = (EditText) findViewById(R.id.password);
-        account = (EditText) findViewById(R.id.account);
-        accountPassword = (EditText) findViewById(R.id.account_password);
+        dindinPassword = (EditText) findViewById(R.id.password);
+        authAccount = (EditText) findViewById(R.id.authAccount);
+        authAccountPassword = (EditText) findViewById(R.id.account_password);
 
         Button save = (Button) findViewById(R.id.save_login_info);
         save.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         Button openAccessibility = (Button) findViewById(R.id.btn_accessibility);
         openAccessibility.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,24 +54,32 @@ public class MainActivity extends AppCompatActivity {
                 gotoAccessibilitySettings(MainActivity.this);
             }
         });
+
+        Account savedAccount = Account.getAccountInfo(this);
+        if (savedAccount != null && savedAccount.hasAlreadySavedLoginInfo()) {
+            phoneNumber.setText(savedAccount.getPhoneNum());
+            dindinPassword.setText(savedAccount.getDingDingPassword());
+            authAccount.setText(savedAccount.getAuthAccount());
+            authAccountPassword.setText(savedAccount.getAuthAccountPassword());
+        }
     }
 
     private void saveLoginInfo() {
 
         String number = phoneNumber.getText().toString();
-        String pass = password.getText().toString();
-        String ac = account.getText().toString();
-        String acPass = accountPassword.getText().toString();
+        String pass = dindinPassword.getText().toString();
+        String ac = authAccount.getText().toString();
+        String acPass = authAccountPassword.getText().toString();
 
         if (!TextUtils.isEmpty(number) && !TextUtils.isEmpty(pass)) {
 
-            SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARE_PREFERENCE, Context.MODE_PRIVATE);
-            sharedPreferences.edit().putString(Constant.PHONE, number)
-                    .putString(Constant.PASSWORD, pass)
-                    .putString(Constant.ACCOUNT, ac)
-                    .putString(Constant.ACCOUNT_PASSWORD, acPass)
-                    .apply();
+            Account account = new Account();
+            account.setPhoneNum(number);
+            account.setDingDingPassword(pass);
+            account.setAuthAccount(ac);
+            account.setAuthAccountPassword(acPass);
 
+            account.saveAccountInfo(account, this);
             Toast.makeText(this, "login info saved", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "no enough login info", Toast.LENGTH_SHORT).show();

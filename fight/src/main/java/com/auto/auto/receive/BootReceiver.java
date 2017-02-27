@@ -4,31 +4,29 @@ import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.auto.auto.Account;
 import com.auto.auto.Constant;
-import com.auto.auto.ShellUtil.HttpUtil;
+import com.auto.auto.Util.HttpUtil;
 
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by x on 2016/11/2.
  */
 public class BootReceiver extends BroadcastReceiver {
     public static String TAG = BootReceiver.class.getSimpleName();
-//    private static int MAX_DELAY = 10 * 60 * 1000;
-//    private static int MIN_DELAY = 3 * 60 * 1000;
+    private static int MAX_DELAY = 10 * 60 * 1000;
+    private static int MIN_DELAY = 3 * 60 * 1000;
 
-    private static int MAX_DELAY = 10 * 1000;
-    private static int MIN_DELAY = 5 * 1000;
+//    private static int MAX_DELAY = 10 * 1000;
+//    private static int MIN_DELAY = 5 * 1000;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -79,16 +77,12 @@ public class BootReceiver extends BroadcastReceiver {
 
     private static void authIn(Context context) {
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARE_PREFERENCE, MODE_PRIVATE);
-        String account = sharedPreferences.getString(Constant.ACCOUNT, "000000");
-        System.out.println("account = " + account);
-        String accountPassword = sharedPreferences.getString(Constant.ACCOUNT_PASSWORD, "000000");
-        System.out.println("accountPassword = " + accountPassword);
         System.out.println("BootReceiver.authIn");
+        Account account = Account.getAccountInfo(context);
         Map<String, String> params = new HashMap<>();
-        params.put("username", account);
-        params.put("password", accountPassword);
-        params.put("pwd", accountPassword);
+        params.put("username", account.getAuthAccount());
+        params.put("password", account.getAuthAccountPassword());
+        params.put("pwd", account.getAuthAccountPassword());
         params.put("rememberPwd", "1");
         params.put("secret", "true");
 
