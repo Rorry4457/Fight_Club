@@ -85,7 +85,7 @@ public class Account implements Serializable{
     private static Account getData(SharedPreferences sharedPreferences) {
 
         Account account = null;
-        String productBase64 = sharedPreferences.getString(Constant.ACCOUNT, null);
+        String productBase64 = sharedPreferences.getString(Constant.ACCOUNT, "");
 
         // 读取字节
         byte[] base64 = Base64.decode(productBase64.getBytes(), Base64.DEFAULT);
