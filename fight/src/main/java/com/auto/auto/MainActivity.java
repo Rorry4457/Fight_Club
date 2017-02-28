@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.newland.support.nllogger.LogUtils;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
             account.saveAccountInfo(account, this);
             Toast.makeText(this, "login info saved", Toast.LENGTH_SHORT).show();
+            LogUtils.d("$$$ 账户信息已保存");
         } else {
             Toast.makeText(this, "no enough login info", Toast.LENGTH_SHORT).show();
         }

@@ -11,11 +11,14 @@ import android.util.Log;
 import com.auto.auto.Account;
 import com.auto.auto.Constant;
 import com.auto.auto.Util.HttpUtil;
+import com.newland.support.nllogger.LogUtils;
 
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static android.util.Config.LOGD;
 
 /**
  * Created by x on 2016/11/2.
@@ -32,7 +35,7 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // 打卡时间已到  唤醒屏幕
 
-        Log.d(TAG, " 接收到定时的信息 ");
+        LogUtils.d("$$$ 收到开机广播");
         wakeUpAndUnlock(context);
     }
 
@@ -57,7 +60,7 @@ public class BootReceiver extends BroadcastReceiver {
 
         Random random = new Random();
         final int delay = random.nextInt(MAX_DELAY) % (MAX_DELAY - MIN_DELAY + 1) + MIN_DELAY;
-        System.out.println("delay = " + delay / 60000 + "mins" + delay % 60000 / 1000 + "sec");
+        LogUtils.d("$$$ delay = " + delay / 60000 + "mins" + delay % 60000 / 1000 + "sec");
 
         new Thread(new Runnable() {
             @Override
@@ -77,7 +80,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     private static void authIn(Context context) {
 
-        System.out.println("BootReceiver.authIn");
+        LogUtils.d("$$$ 进行网络认证");
         Account account = Account.getAccountInfo(context);
         Map<String, String> params = new HashMap<>();
         params.put("username", account.getAuthAccount());
@@ -88,16 +91,16 @@ public class BootReceiver extends BroadcastReceiver {
 
         String strResult = HttpUtil.submitPostData(Constant.AUTH_ADDREDD, params, "utf-8");
 
-        Log.d("result ", strResult);
+        LogUtils.d("$$$ strResult = " + strResult);
     }
 
     private static void openDingDing(Context context) {
 
-        System.out.println("BootReceiver.openDingDing");
+        LogUtils.d("$$$ 打开钉钉");
         if (isAppInstalled(context, Constant.DING_PACKAGE_NAME)) {
             context.startActivity(context.getPackageManager().getLaunchIntentForPackage(Constant.DING_PACKAGE_NAME));
         } else {
-            System.out.println("BootReceiver.openDingDing + no isnstalled DingDing");
+            LogUtils.d("$$$ 未安装钉钉");
         }
     }
 

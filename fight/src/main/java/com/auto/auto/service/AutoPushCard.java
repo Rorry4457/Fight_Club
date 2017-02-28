@@ -11,11 +11,16 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.auto.auto.Account;
 import com.auto.auto.Constant;
+import com.newland.support.nllogger.LogUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static android.util.Config.LOGV;
 
 /**
  * Created by x on 2016/11/1.
@@ -54,9 +59,13 @@ public class AutoPushCard extends AccessibilityService {
     private void openScheduleSetting() {
         if (!isSetSchedul) {
             AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
-            AccessibilityNodeInfo scheduled = rootInActiveWindow.getChild(1).getChild(13);
-            scheduled.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            isSetSchedul = true;
+            if (rootInActiveWindow.getChildCount() > 0) {
+                AccessibilityNodeInfo scheduled = rootInActiveWindow.getChild(1).getChild(13);
+                scheduled.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                isSetSchedul = true;
+            } else {
+                LogUtils.d("$$$ 未找到设置定时开关机");
+            }
         }
     }
 
@@ -66,7 +75,6 @@ public class AutoPushCard extends AccessibilityService {
             return;
         }
 
-        isWebPageOpened = true;
         if (findNodeById(Constant.WORK_LAYOUT).size() > 0) {
             List<AccessibilityNodeInfo> itemList = findNodeById(Constant.WORK_LAYOUT_ITEM);
 
@@ -74,9 +82,10 @@ public class AutoPushCard extends AccessibilityService {
             for (AccessibilityNodeInfo info : itemList) {
                 AccessibilityNodeInfo child = info.getChild(info.getChildCount() - 1);
                 if (child.getClassName().equals("android.widget.TextView") && child.getText().equals("考勤打卡")) {
-                    Log.d(TAG, " 找到了 考勤打卡的 item  点击进入打卡页面");
+                    LogUtils.d(" 找到了 考勤打卡的 item  点击进入打卡页面");
                     info.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    waitUntilCheckOut();
+                    isWebPageOpened = true;
+//                    waitUntilCheckOut();
                     return;
                 }
             }
@@ -95,8 +104,7 @@ public class AutoPushCard extends AccessibilityService {
     }
 
     private void checkOut() throws IOException {
-        System.out.println("AutoPushCard.checkOut");
-
+        LogUtils.d("AutoPushCard.checkOut");
 
 //        AccessibilityNodeInfo btn = findNodeById(Constant.WEB_VIEW).get(1).getChild(0).getChild(0).getChild(4).getChild(2).getChild(3);
 //        System.out.println("btn = " + btn.getContentDescription());
@@ -255,7 +263,7 @@ public class AutoPushCard extends AccessibilityService {
         if (loginLayout != null && loginLayout.size() > 0 && !isLoginOperate) {
             isLoginOperate = true;
             //在登录界面 需要登录钉钉
-            Log.d(TAG, "需要登录  找到登录界面的控件 :" + loginLayout.size());
+            LogUtils.d("$$$ 需要登录  找到登录界面的控件 :");
 
             List<AccessibilityNodeInfo> phoneEt = findNodeById(Constant.LOGIN_PHONE_EDITTEXT);
             List<AccessibilityNodeInfo> pwdEt = findNodeById(Constant.LOGIN_PASSWROD_EDITTEXT);
@@ -266,18 +274,16 @@ public class AutoPushCard extends AccessibilityService {
             phone.performAction(AccessibilityNodeInfo.ACTION_CLICK);
             setText(phone, account.getPhoneNum());
 
-            System.out.println("Input login password");
 
             AccessibilityNodeInfo password = pwdEt.get(0);//设置登录密码
             setText(password, account.getDingDingPassword());
 
-            System.out.println("Start Login");
-
+            LogUtils.d("$$$ 完成输入账户信息");
             loginBtn.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            LogUtils.d("$$$ 开始登录");
         } else if (findNodeById(Constant.BOTTOM_TAB_LAYOUT).size() > 0) {
 
-            System.out.println("Scorll to Portal/工作");
-
+            LogUtils.d("$$$ 滑动tabBar到 工作 ");
             AccessibilityNodeInfo layoutWork = findNodeById(Constant.TAB_BUTTON_WORK).get(0);
             layoutWork.performAction(AccessibilityNodeInfo.ACTION_CLICK);
             isWebPageOpened = false;
@@ -287,7 +293,13 @@ public class AutoPushCard extends AccessibilityService {
 
     public List<AccessibilityNodeInfo> findNodeById(String id) {
         AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
-        return rootInActiveWindow.findAccessibilityNodeInfosByViewId(id);
+        try {
+            return rootInActiveWindow.findAccessibilityNodeInfosByViewId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtils.e(e);
+            return new ArrayList<>();
+        }
     }
 
     public void setText(AccessibilityNodeInfo node, String s) {
@@ -309,6 +321,6 @@ public class AutoPushCard extends AccessibilityService {
         serviceInfo.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
         serviceInfo.notificationTimeout = 100;
         setServiceInfo(serviceInfo);
-        Log.d(TAG, " onserviceConnected 辅助服务连接成功");
+        LogUtils.d("$$$ 辅助服务连接成功");
     }
 }
