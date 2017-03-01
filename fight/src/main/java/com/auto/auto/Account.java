@@ -15,7 +15,7 @@ import java.io.Serializable;
  * Created by Rorry on 2017/2/27.
  */
 
-public class Account implements Serializable{
+public class Account implements Serializable {
 
     public String getPhoneNum() {
         return phoneNum;
@@ -47,6 +47,25 @@ public class Account implements Serializable{
 
     public void setAuthAccountPassword(String authAccountPassword) {
         this.authAccountPassword = authAccountPassword;
+    }
+
+    public static boolean isCheckInToday(Context context) {
+        Account account = getAccountInfo(context);
+        return account.isCheckInToday();
+    }
+
+    public static void setIsCheckInToday(boolean isCheckInToday, Context context) {
+        Account account = getAccountInfo(context);
+        account.setCheckInToday(isCheckInToday);
+        account.saveAccountInfo(account, context);
+    }
+
+    public void setCheckInToday(boolean checkInToday) {
+        isCheckInToday = checkInToday;
+    }
+
+    public boolean isCheckInToday() {
+        return isCheckInToday;
     }
 
     public boolean hasAlreadySavedLoginInfo() {
@@ -108,5 +127,8 @@ public class Account implements Serializable{
     private String phoneNum = "";
     private String dingDingPassword = "";
     private String authAccount = "";
+
     private String authAccountPassword = "";
+
+    private boolean isCheckInToday = false;
 }

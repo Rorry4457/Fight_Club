@@ -5,7 +5,6 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -19,9 +18,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-import static android.util.Config.LOGV;
-
 /**
  * Created by x on 2016/11/1.
  */
@@ -33,7 +29,6 @@ public class AutoPushCard extends AccessibilityService {
     private static int IN_Y_COORDINATES = 600;
     private static int OUT_Y_COORDINATES = 890;
     private static int CENTER_X_COORDINATES = 360;
-    private static boolean isWebPageOpened = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -43,13 +38,9 @@ public class AutoPushCard extends AccessibilityService {
         String packageName = accessibilityEvent.getPackageName().toString();
 
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
-            autoLoginOrScroll();
+            autoLogin();
         } else if (eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
-            try {
-                openCheckInPage();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            openCheckInPage();
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.SETTING.equals(packageName)) {
             openScheduleSetting();
         }
@@ -70,9 +61,14 @@ public class AutoPushCard extends AccessibilityService {
     }
 
     private void openCheckInPage() {
-
-        if (isWebPageOpened) {
+        if (Account.isCheckInToday(this)) {
             return;
+        }
+
+        if (findNodeById(Constant.BOTTOM_TAB_LAYOUT).size() > 0) {
+            LogUtils.d("$$$ 滑动tabBar到 工作 ");
+            AccessibilityNodeInfo layoutWork = findNodeById(Constant.TAB_BUTTON_WORK).get(0);
+            layoutWork.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
 
         if (findNodeById(Constant.WORK_LAYOUT).size() > 0) {
@@ -84,8 +80,7 @@ public class AutoPushCard extends AccessibilityService {
                 if (child.getClassName().equals("android.widget.TextView") && child.getText().equals("考勤打卡")) {
                     LogUtils.d(" 找到了 考勤打卡的 item  点击进入打卡页面");
                     info.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    isWebPageOpened = true;
-//                    waitUntilCheckOut();
+                    Account.setIsCheckInToday(true, this);
                     return;
                 }
             }
@@ -257,7 +252,7 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
-    private void autoLoginOrScroll() {
+    private void autoLogin() {
 
         List<AccessibilityNodeInfo> loginLayout = findNodeById(Constant.LOGIN_LAYOUT);
         if (loginLayout != null && loginLayout.size() > 0 && !isLoginOperate) {
@@ -281,12 +276,6 @@ public class AutoPushCard extends AccessibilityService {
             LogUtils.d("$$$ 完成输入账户信息");
             loginBtn.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
             LogUtils.d("$$$ 开始登录");
-        } else if (findNodeById(Constant.BOTTOM_TAB_LAYOUT).size() > 0) {
-
-            LogUtils.d("$$$ 滑动tabBar到 工作 ");
-            AccessibilityNodeInfo layoutWork = findNodeById(Constant.TAB_BUTTON_WORK).get(0);
-            layoutWork.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            isWebPageOpened = false;
         }
     }
 

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.PowerManager;
-import android.util.Log;
 
 import com.auto.auto.Account;
 import com.auto.auto.Constant;
@@ -18,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static android.util.Config.LOGD;
+import static com.auto.auto.Account.getAccountInfo;
 
 /**
  * Created by x on 2016/11/2.
@@ -36,6 +35,7 @@ public class BootReceiver extends BroadcastReceiver {
         // 打卡时间已到  唤醒屏幕
 
         LogUtils.d("$$$ 收到开机广播");
+        Account.setIsCheckInToday(false, context);
         wakeUpAndUnlock(context);
     }
 
@@ -81,7 +81,7 @@ public class BootReceiver extends BroadcastReceiver {
     private static void authIn(Context context) {
 
         LogUtils.d("$$$ 进行网络认证");
-        Account account = Account.getAccountInfo(context);
+        Account account = getAccountInfo(context);
         Map<String, String> params = new HashMap<>();
         params.put("username", account.getAuthAccount());
         params.put("password", account.getAuthAccountPassword());
