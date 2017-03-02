@@ -9,23 +9,24 @@ import android.os.PowerManager;
 
 import com.auto.auto.Account;
 import com.auto.auto.Constant;
+import com.auto.auto.Util.Delay;
+import com.auto.auto.Util.DelayDelegate;
 import com.auto.auto.Util.HttpUtil;
 import com.newland.support.nllogger.LogUtils;
 
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import static com.auto.auto.Account.getAccountInfo;
 
 /**
  * Created by x on 2016/11/2.
  */
-public class BootReceiver extends BroadcastReceiver {
+public class BootReceiver extends BroadcastReceiver implements DelayDelegate {
     public static String TAG = BootReceiver.class.getSimpleName();
-    private static int MAX_DELAY = 10 * 60 * 1000;
-    private static int MIN_DELAY = 3 * 60 * 1000;
+    private static int MAX_DELAY = 5 * 60;
+    private static int MIN_DELAY = 3 * 60;
 
 //    private static int MAX_DELAY = 10 * 1000;
 //    private static int MIN_DELAY = 5 * 1000;
@@ -39,7 +40,7 @@ public class BootReceiver extends BroadcastReceiver {
         wakeUpAndUnlock(context);
     }
 
-    private static void wakeUpAndUnlock(final Context context) {
+    private void wakeUpAndUnlock(final Context context) {
         KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
         //解锁
@@ -57,25 +58,8 @@ public class BootReceiver extends BroadcastReceiver {
         KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("");
         keyguardLock.disableKeyguard();
 
-
-        Random random = new Random();
-        final int delay = random.nextInt(MAX_DELAY) % (MAX_DELAY - MIN_DELAY + 1) + MIN_DELAY;
-        LogUtils.d("$$$ delay = " + delay / 60000 + "mins" + delay % 60000 / 1000 + "sec");
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(delay);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                authIn(context);
-                openDingDing(context);
-
-            }
-        }).start();
+        Delay.delegate = this;
+        Delay.delayIn(MIN_DELAY, MAX_DELAY, context);
     }
 
     private static void authIn(Context context) {
@@ -113,4 +97,9 @@ public class BootReceiver extends BroadcastReceiver {
         }
     }
 
+    @Override
+    public void afterDelay(Context context) {
+        authIn(context);
+        openDingDing(context);
+    }
 }
