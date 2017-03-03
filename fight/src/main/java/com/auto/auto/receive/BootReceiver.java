@@ -24,12 +24,11 @@ import static com.auto.auto.Account.getAccountInfo;
  * Created by x on 2016/11/2.
  */
 public class BootReceiver extends BroadcastReceiver implements DelayDelegate {
-    public static String TAG = BootReceiver.class.getSimpleName();
-    private static int MAX_DELAY = 5 * 60;
-    private static int MIN_DELAY = 3 * 60;
+//    private static int MAX_DELAY = 5 * 60;
+//    private static int MIN_DELAY = 3 * 60;
 
-//    private static int MAX_DELAY = 10 * 1000;
-//    private static int MIN_DELAY = 5 * 1000;
+    private static int MAX_DELAY = 10;
+    private static int MIN_DELAY = 5;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -37,29 +36,29 @@ public class BootReceiver extends BroadcastReceiver implements DelayDelegate {
 
         LogUtils.d("$$$ 收到开机广播");
         Account.setIsCheckInToday(false, context);
+
+        Delay.delegate = this;
+        Delay.delayIn(MIN_DELAY, MAX_DELAY, context);
+    }
+
+    @Override
+    public void afterDelay(Context context) {
         wakeUpAndUnlock(context);
     }
 
     private void wakeUpAndUnlock(final Context context) {
-        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-        KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
-        //解锁
-        kl.disableKeyguard();
         //获取电源管理器对象
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK, "bright");
-        //点亮屏幕
         wl.acquire();
+        LogUtils.d("$$$ 点亮屏幕");
+
+        authIn(context);
+        openDingDing(context);
+
         //释放
         wl.release();
-
-        KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(context.KEYGUARD_SERVICE);
-        KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("");
-        keyguardLock.disableKeyguard();
-
-        Delay.delegate = this;
-        Delay.delayIn(MIN_DELAY, MAX_DELAY, context);
     }
 
     private static void authIn(Context context) {
@@ -67,11 +66,11 @@ public class BootReceiver extends BroadcastReceiver implements DelayDelegate {
         LogUtils.d("$$$ 进行网络认证");
         Account account = getAccountInfo(context);
         Map<String, String> params = new HashMap<>();
-        params.put("username", account.getAuthAccount());
-        params.put("password", account.getAuthAccountPassword());
-        params.put("pwd", account.getAuthAccountPassword());
-        params.put("rememberPwd", "1");
-        params.put("secret", "true");
+        params.put(Constant.NET_AUTH_USER, account.getAuthAccount());
+        params.put(Constant.NET_AUTH_PASSWORD, account.getAuthAccountPassword());
+        params.put(Constant.NET_AUTH_PWD, account.getAuthAccountPassword());
+        params.put(Constant.NET_AUTH_REMBER, "1");
+        params.put(Constant.NET_AUTH_SECRET, "true");
 
         String strResult = HttpUtil.submitPostData(Constant.AUTH_ADDREDD, params, "utf-8");
 
@@ -95,11 +94,5 @@ public class BootReceiver extends BroadcastReceiver implements DelayDelegate {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-    }
-
-    @Override
-    public void afterDelay(Context context) {
-        authIn(context);
-        openDingDing(context);
     }
 }

@@ -3,4 +3,5 @@
     android:accessibilityEventTypes="typeWindowStateChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:canRetrieveWindowContent="true"
-    android:description="@string/app_name" />
+    android:description="@string/app_name"
+    android:packageNames="com.alibaba.android.rimet"/>

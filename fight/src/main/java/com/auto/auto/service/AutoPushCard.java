@@ -42,7 +42,8 @@ public class AutoPushCard extends AccessibilityService {
         } else if (eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             openCheckInPage();
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.SETTING.equals(packageName)) {
-            openScheduleSetting();
+//            System.out.println("packageName = " + packageName);
+//            openScheduleSetting();
         }
     }
 
@@ -50,7 +51,7 @@ public class AutoPushCard extends AccessibilityService {
     private void openScheduleSetting() {
         if (!isSetSchedul) {
             AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
-            if (rootInActiveWindow.getChildCount() > 0) {
+            if (rootInActiveWindow.getChild(1).getChildCount() > 0) {
                 AccessibilityNodeInfo scheduled = rootInActiveWindow.getChild(1).getChild(13);
                 scheduled.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 isSetSchedul = true;

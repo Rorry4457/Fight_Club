@@ -27,7 +27,11 @@ public class Constant {
     //key
     public static final String ACCOUNT = "com.fight.club.account";
     public static final String SETTING = "com.android.settings";
-    public static final String IS_CHECK_IN_TODAY = "com.fight.clun.checkin";
+    public static final String NET_AUTH_USER = "username";
+    public static final String NET_AUTH_PASSWORD = "password";
+    public static final String NET_AUTH_PWD = "pwd";
+    public static final String NET_AUTH_REMBER = "rememberPwd";
+    public static final String NET_AUTH_SECRET = "secret";
 
     //sharePreference
     public static final String SHARE_PREFERENCE = "com.login.share.preference";
