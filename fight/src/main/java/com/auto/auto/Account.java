@@ -11,10 +11,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-/**
- * Created by Rorry on 2017/2/27.
- */
-
 public class Account implements Serializable {
 
     public String getPhoneNum() {

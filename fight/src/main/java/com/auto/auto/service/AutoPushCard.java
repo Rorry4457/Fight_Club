@@ -161,53 +161,6 @@ public class AutoPushCard extends AccessibilityService {
 //        }
     }
 
-    protected static boolean haveRoot() {
-
-        int i = execRootCmdSilent("echo test"); // 通过执行测试命令来检测
-        if (i != -1) {
-            return true;
-        }
-        return false;
-    }
-
-    protected static int execRootCmdSilent(String paramString) {
-        try {
-            Process localProcess = Runtime.getRuntime().exec("su");
-            Object localObject = localProcess.getOutputStream();
-            DataOutputStream localDataOutputStream = new DataOutputStream(
-                    (OutputStream) localObject);
-            String str = String.valueOf(paramString);
-            localObject = str + "\n";
-            localDataOutputStream.writeBytes((String) localObject);
-            localDataOutputStream.flush();
-            localDataOutputStream.writeBytes("exit\n");
-            localDataOutputStream.flush();
-            localProcess.waitFor();
-            int result = localProcess.exitValue();
-            return (Integer) result;
-        } catch (Exception localException) {
-            localException.printStackTrace();
-            return -1;
-        }
-    }
-
-    private boolean isRoot() {
-        try {
-            Process pro = Runtime.getRuntime().exec("su");
-            pro.getOutputStream().write("exit\n".getBytes());
-            pro.getOutputStream().flush();
-            int i = pro.waitFor();
-            if (0 == i) {
-                pro = Runtime.getRuntime().exec("su");
-                return true;
-            }
-
-        } catch (Exception e) {
-            return false;
-        }
-        return false;
-
-    }
 
     private void waitUntilCheckOut() {
         try {
@@ -311,6 +264,5 @@ public class AutoPushCard extends AccessibilityService {
         serviceInfo.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
         serviceInfo.notificationTimeout = 100;
         setServiceInfo(serviceInfo);
-        LogUtils.d("$$$ 辅助服务连接成功");
     }
 }

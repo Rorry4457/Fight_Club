@@ -15,7 +15,6 @@ public class Constant {
 
     // 钉钉主页
 
-
     //钉钉主页tab
     public static final String BOTTOM_TAB_LAYOUT = "com.alibaba.android.rimet:id/bottom_tab"; // 底部导航按钮
     public static final String TAB_BUTTON_WORK = "com.alibaba.android.rimet:id/home_bottom_tab_button_work"; // 底部考勤打卡按钮
@@ -38,4 +37,12 @@ public class Constant {
 
     //authWeb Address
     public static final String AUTH_ADDREDD = "http://192.168.30.111/webAuth/";
+
+    //Time
+    public static final int HOUR_OF_CHECK_OUT = 17;
+    public static final int MINUTE_OF_CHECK_OUT = 45;
+
+    //RequestCode
+    public static final int CHECK_IN = 1001;
+    public static final int CHECK_OUT = 1002;
 }

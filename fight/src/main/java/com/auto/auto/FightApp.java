@@ -15,10 +15,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 
-/**
- * Created by Rorry on 2017/2/28.
- */
-
 public class FightApp extends Application {
     @Override
     public void onCreate() {
