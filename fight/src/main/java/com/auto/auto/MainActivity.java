@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText dindinPassword;
     private EditText authAccount;
     private EditText authAccountPassword;
+    private EditText eMail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         dindinPassword = (EditText) findViewById(R.id.password);
         authAccount = (EditText) findViewById(R.id.authAccount);
         authAccountPassword = (EditText) findViewById(R.id.account_password);
+        eMail = (EditText) findViewById(R.id.e_mail);
 
         Button save = (Button) findViewById(R.id.save_login_info);
         save.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             dindinPassword.setText(savedAccount.getDingDingPassword());
             authAccount.setText(savedAccount.getAuthAccount());
             authAccountPassword.setText(savedAccount.getAuthAccountPassword());
+            eMail.setText(savedAccount.getMail());
         }
     }
 
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         String pass = dindinPassword.getText().toString();
         String ac = authAccount.getText().toString();
         String acPass = authAccountPassword.getText().toString();
+        String mail = eMail.getText().toString();
 
         if (!TextUtils.isEmpty(number) && !TextUtils.isEmpty(pass)) {
 
@@ -80,12 +84,13 @@ public class MainActivity extends AppCompatActivity {
             account.setDingDingPassword(pass);
             account.setAuthAccount(ac);
             account.setAuthAccountPassword(acPass);
+            account.setMail(mail);
 
             account.saveAccountInfo(account, this);
-            Toast.makeText(this, "login info saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Info saved", Toast.LENGTH_SHORT).show();
             LogUtils.d("$$$ 账户信息已保存");
         } else {
-            Toast.makeText(this, "no enough login info", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "no enough info", Toast.LENGTH_SHORT).show();
         }
     }
 

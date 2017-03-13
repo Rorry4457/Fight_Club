@@ -45,6 +45,14 @@ public class Account implements Serializable {
         this.authAccountPassword = authAccountPassword;
     }
 
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     public static boolean isCheckInToday(Context context) {
         Account account = getAccountInfo(context);
         return account.isCheckInToday();
@@ -119,12 +127,12 @@ public class Account implements Serializable {
         }
         return account;
     }
-
     private String phoneNum = "";
     private String dingDingPassword = "";
+
     private String authAccount = "";
 
+    private String mail = "";
     private String authAccountPassword = "";
-
     private boolean isCheckInToday = false;
 }

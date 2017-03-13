@@ -10,11 +10,10 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.auto.auto.Account;
 import com.auto.auto.Constant;
+import com.auto.auto.Operation;
 import com.newland.support.nllogger.LogUtils;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +64,8 @@ public class AutoPushCard extends AccessibilityService {
         if (Account.isCheckInToday(this)) {
             return;
         }
+
+        Operation.sendEmail(this);
 
         if (findNodeById(Constant.BOTTOM_TAB_LAYOUT).size() > 0) {
             LogUtils.d("$$$ 滑动tabBar到 工作 ");

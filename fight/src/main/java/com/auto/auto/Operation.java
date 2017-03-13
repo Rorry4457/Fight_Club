@@ -1,26 +1,31 @@
 package com.auto.auto;
 
-import android.app.AlarmManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.text.TextUtils;
 
 import com.auto.auto.Util.HttpUtil;
+import com.auto.auto.Util.Mail;
 import com.newland.support.nllogger.LogUtils;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.auto.auto.Account.getAccountInfo;
+import static com.sun.mail.imap.protocol.INTERNALDATE.format;
 
 
 public class Operation {
+
+    private static final String MAIN_MAIL_ADDRESS = "monkeyrunanddogrun@yeah.net";
+    private static final String MAIN_MAIL_PASSWORD = "ELDao3xmgj";
 
     public static void startCheckOutOperation(Context context) {
 
@@ -63,7 +68,7 @@ public class Operation {
             public void run() {
 
                 LogUtils.d("$$$ 进行网络认证");
-                Account account = getAccountInfo(context);
+                Account account = Account.getAccountInfo(context);
                 Map<String, String> params = new HashMap<>();
                 params.put(Constant.NET_AUTH_USER, account.getAuthAccount());
                 params.put(Constant.NET_AUTH_PASSWORD, account.getAuthAccountPassword());
@@ -99,7 +104,63 @@ public class Operation {
         }
     }
 
-    protected static boolean haveRoot() {
+    public static void sendEmail(Context context) {
+
+        String mail = Account.getAccountInfo(context).getMail();
+
+        if (!TextUtils.isEmpty(mail)) {
+            Operation.sendEmailTo(new String[]{mail}, true);
+        } else {
+            LogUtils.d("$$$ 邮箱地址为空");
+        }
+    }
+
+    public static void sendEmailTo(final String[] mailAddresses, final boolean isSuccess) {
+
+        LogUtils.d("$$$ 开始发送邮件");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Mail mail = new Mail(MAIN_MAIL_ADDRESS, MAIN_MAIL_PASSWORD);
+
+                mail.setTo(mailAddresses);
+                mail.setFrom(MAIN_MAIL_ADDRESS);
+                mail.setSubject(createMailSubject());
+
+                if (isSuccess) {
+                    mail.setBody(createMailBody());
+                } else {
+                    mail.setBody("Lose");
+                }
+
+                try {
+                    boolean isMailSended = mail.send();
+                    if (isMailSended) {
+                        LogUtils.d("$$$ 邮件发送成功");
+                    } else {
+                        LogUtils.d("$$$ 邮件发送失败");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LogUtils.e(e);
+                }
+            }
+        }).start();
+    }
+
+    private static String createMailSubject() {
+
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        String dateTime = dateFormat.format(new Date());
+
+        return "系统测试报告请注意查收" + dateTime;
+    }
+
+    private static String createMailBody() {
+        return "今天系统运行正常，可以适当的休息，路上不必匆忙。本邮件为搏击俱乐部后台自动发送，请勿回复，有任何问题请自行联系运维人员";
+    }
+
+    private static boolean haveRoot() {
 
         int i = execRootCmdSilent("echo test"); // 通过执行测试命令来检测
         if (i != -1) {
@@ -108,7 +169,7 @@ public class Operation {
         return false;
     }
 
-    protected static int execRootCmdSilent(String paramString) {
+    private static int execRootCmdSilent(String paramString) {
         try {
             Process localProcess = Runtime.getRuntime().exec("su");
             Object localObject = localProcess.getOutputStream();

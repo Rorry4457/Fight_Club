@@ -9,7 +9,8 @@ android {
         minSdkVersion 18
         targetSdkVersion 24
         versionCode 1
-        versionName "1.0.4"
+        versionName "1.0.5"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -32,4 +33,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.0.0-beta1'
     compile 'com.newland.support:nllogger:0.0.2-SNAPSHOT'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support:support-annotations:24.0.0-beta1'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    compile files('libs/mail.jar')
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
 }

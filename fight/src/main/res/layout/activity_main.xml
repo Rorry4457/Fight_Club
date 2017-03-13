@@ -49,6 +49,13 @@
             android:inputType="textPassword"
             android:maxLines="1" />
 
+        <EditText
+            android:id="@+id/e_mail"
+            style="@style/EidtTextStyle"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+
         <Button
             android:id="@+id/save_login_info"
             android:layout_width="wrap_content"
