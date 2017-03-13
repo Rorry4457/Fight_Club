@@ -15,17 +15,17 @@ import com.newland.support.nllogger.LogUtils;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.sun.mail.imap.protocol.INTERNALDATE.format;
-
 
 public class Operation {
 
     private static final String MAIN_MAIL_ADDRESS = "monkeyrunanddogrun@yeah.net";
     private static final String MAIN_MAIL_PASSWORD = "ELDao3xmgj";
+    private static final String MAIN_BODY = "嗡 嘛 呢 呗 咪 吽 临 兵 斗 者 皆 阵 列 在 前";
 
     public static void startCheckOutOperation(Context context) {
 
@@ -153,11 +153,31 @@ public class Operation {
         DateFormat dateFormat = DateFormat.getDateTimeInstance();
         String dateTime = dateFormat.format(new Date());
 
-        return "系统测试报告请注意查收" + dateTime;
+        return "系统测试报告，请注意查收  " + dateTime;
     }
 
-    private static String createMailBody() {
-        return "今天系统运行正常，可以适当的休息，路上不必匆忙。本邮件为搏击俱乐部后台自动发送，请勿回复，有任何问题请自行联系运维人员";
+    public static String createMailBody() {
+
+        String body = "";
+
+        String[] splits = MAIN_BODY.split(" ");
+        int length = splits.length;
+
+        ArrayList<Integer> indexArray = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            indexArray.add(i);
+        }
+
+        Collections.shuffle(indexArray);
+
+        for (int i = 0; i < indexArray.size(); i++) {
+            body += splits[indexArray.get(i)];
+            body += " ";
+        }
+
+        String subBody = "\n\n\n\n\n\n\n本邮件为搏击俱乐部后台自动发送，请勿回复，有任何问题请自行联系运维人员";
+
+        return body + subBody;
     }
 
     private static boolean haveRoot() {
