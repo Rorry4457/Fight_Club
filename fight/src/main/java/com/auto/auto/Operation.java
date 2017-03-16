@@ -1,12 +1,14 @@
 package com.auto.auto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 
 import com.auto.auto.Util.HttpUtil;
 import com.auto.auto.Util.Mail;
@@ -15,11 +17,14 @@ import com.newland.support.nllogger.LogUtils;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Operation {
 
@@ -62,6 +67,24 @@ public class Operation {
         wl.release();
     }
 
+    public static boolean isToday(String dateString, String formatType) {
+
+        SimpleDateFormat format = new SimpleDateFormat(formatType);
+        Date date = null;
+
+        try {
+            date = format.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (date != null) {
+            return DateUtils.isToday(date.getTime());
+        } else {
+            return false;
+        }
+    }
+
     private static void authIn(final Context context, final Runnable uiRunnable) {
         new Thread(new Runnable() {
             @Override
@@ -93,6 +116,14 @@ public class Operation {
         } else {
             LogUtils.d("$$$ 未安装钉钉");
         }
+    }
+
+    public static void backToHome(Context context) {
+        LogUtils.d("$$$ 回到桌面");
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        context.startActivity(intent);
     }
 
     private static boolean isAppInstalled(Context context, String packageName) {

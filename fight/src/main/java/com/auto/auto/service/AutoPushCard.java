@@ -5,6 +5,8 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -13,7 +15,6 @@ import com.auto.auto.Constant;
 import com.auto.auto.Operation;
 import com.newland.support.nllogger.LogUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +39,10 @@ public class AutoPushCard extends AccessibilityService {
 
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             autoLogin();
-        } else if (eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
-            openCheckInPage();
+        } else if (eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
+            openWorkNotificationPage();
+            //打开二级页面后会再次Window State Change 在此检查是否已打卡成功，
+            isAlreadyCheckIn();
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.SETTING.equals(packageName)) {
 //            System.out.println("packageName = " + packageName);
 //            openScheduleSetting();
@@ -60,12 +63,11 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
+    //此方法经验证可行，但不是最优方案，切换到另一方案，暂不删除
     private void openCheckInPage() {
         if (Account.isCheckInToday(this)) {
             return;
         }
-
-        Operation.sendEmail(this);
 
         if (findNodeById(Constant.BOTTOM_TAB_LAYOUT).size() > 0) {
             LogUtils.d("$$$ 滑动tabBar到 工作 ");
@@ -80,130 +82,104 @@ public class AutoPushCard extends AccessibilityService {
             for (AccessibilityNodeInfo info : itemList) {
                 AccessibilityNodeInfo child = info.getChild(info.getChildCount() - 1);
                 if (child.getClassName().equals("android.widget.TextView") && child.getText().equals("考勤打卡")) {
-                    LogUtils.d(" 找到了 考勤打卡的 item  点击进入打卡页面");
+                    LogUtils.d("$$$ 找到了 考勤打卡的 item  点击进入打卡页面");
                     info.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     Account.setIsCheckInToday(true, this);
+
+                    waitAndCheck(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isCheckFinished()) {
+                                Operation.sendEmail(AutoPushCard.this);
+                            }
+                        }
+                    });
                     return;
                 }
             }
         }
     }
 
-    private void checkIn() {
-        System.out.println("AutoPushCard.checkIn");
-        String[] checkInOrder = {"input", "tap", "" + CENTER_X_COORDINATES, "" + IN_Y_COORDINATES};
+    private void waitAndCheck(final Runnable runnable) {
 
-        try {
-            new ProcessBuilder(checkInOrder).start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    LogUtils.d("$$$ 开始等待页面加载");
+                    Thread.sleep(10000);
+                    Handler uiHandler = new Handler(Looper.getMainLooper());
+                    uiHandler.post(runnable);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
-    private void checkOut() throws IOException {
-        LogUtils.d("AutoPushCard.checkOut");
-
-//        AccessibilityNodeInfo btn = findNodeById(Constant.WEB_VIEW).get(1).getChild(0).getChild(0).getChild(4).getChild(2).getChild(3);
-//        System.out.println("btn = " + btn.getContentDescription());
-//        boolean success = btn.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//        System.out.println("success = " + success);
-//        for (AccessibilityNodeInfo button :
-//                buttons) {
-//            button.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//            System.out.println("button.getContentDescription() = " + button.getContentDescription());
-//        }
-
-//
-//        final String checkOutOrder = "input tap " + CENTER_X_COORDINATES + " " + OUT_Y_COORDINATES;
-//        System.out.println("checkOutOrder = " + checkOutOrder);
-//
-//        ShellUtils.CommandResult result = ShellUtils.execCommand(checkOutOrder, false);
-//        System.out.println("result = " + result.errorMsg);
-//        Runtime.getRuntime().exec(checkOutOrder);
-
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        }).start();
-
-
-//        Process p = Runtime.getRuntime().exec(checkOutOrder);
-//        String data = null;
-//        BufferedReader ie = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-//        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//        String error = null;
-//        while ((error = ie.readLine()) != null
-//                && !error.equals("null")) {
-//            data += error + "\n";
-//        }
-//        String line = null;
-//        while ((line = in.readLine()) != null
-//                && !line.equals("null")) {
-//            data += line + "\n";
-//        }
-//
-//        Log.v("ls", data);
-//        ShellUtils shellUtils = new ShellUtils();
-//        try {
-//            Runtime.getRuntime().exec(checkOutOrder);
-//            shellUtils.start();
-//            shellUtils.execCommand(checkOutOrder);
-//            shellUtils.stop();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-
-    private void waitUntilCheckOut() {
+    private boolean isCheckFinished() {
+        LogUtils.d("$$$ 开始检测是否已经打卡");
         try {
-            String description = findNodeById(Constant.WEB_VIEW).get(1).getChild(0).getChild(0).getChild(4).getChild(2).getChild(3).getContentDescription().toString();
-            if (description.equals("下班打卡")) {
-                checkOut();
+            String description = findNodeById(Constant.WEB_VIEW).get(0).getChild(0).getChild(0).getChild(0).getChild(4).getChild(1).getChild(3).getChild(0).getContentDescription().toString();
+            if (description.equals("正常")) {
+                LogUtils.d("$$$ 检测到已经打卡");
+                return true;
             }
         } catch (Exception e) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("wait 1 second");
-                    try {
-                        Thread.sleep(1000);
-                        waitUntilCheckOut();
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
+            LogUtils.e(e);
+        }
 
+        return false;
+    }
+
+    private void openWorkNotificationPage() {
+        if (Account.isCheckInToday(this)) {
+            return;
+        }
+
+        List<AccessibilityNodeInfo> bottmeTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
+        if (bottmeTab.size() > 0) {
+            List<AccessibilityNodeInfo> tableLayout = findNodeById(Constant.MAIN_TABLE_VIEW);
+            if (tableLayout.size() > 0) {
+                List<AccessibilityNodeInfo> items = tableLayout.get(0).findAccessibilityNodeInfosByText(Constant.DEPARTMENT);
+                if (items.size() > 0) {
+                    items.get(0).getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    LogUtils.d("$$$ 打开工作通知页");
                 }
-            }).start();
+            }
         }
     }
 
-    private void test() {
+    private void isAlreadyCheckIn() {
 
-        System.out.println("AutoPushCard.test");
-        try {
-            // 到达listView
-            AccessibilityNodeInfo checkOut = findNodeById("com.alibaba.android.rimet:id/common_webview").get(1).getChild(0).getChild(0).getChild(4).getChild(2);
-            checkOut.getChild(3).getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//            int count = checkOut.getChildCount();
-//            for(int i = 0;i<count;i++){
-//                AccessibilityNodeInfo child = checkOut.getChild(i);
-//                CharSequence desc = child.getContentDescription();
-//                System.out.println("desc = " + desc);
-//                boolean result = child.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//                System.out.println("result = " + result);
-//                System.out.println("i = " + i);
-//            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Account.isCheckInToday(this)) {
+            return;
+        }
+
+        List<AccessibilityNodeInfo> titleView = findNodeById(Constant.ALL_VIEW_TITLE);
+        if (titleView.size() > 0) {
+            String title = titleView.get(0).getText().toString();
+
+            if (title.equals(Constant.DEPARTMENT)) {
+                LogUtils.d("$$$ 打开工作通知页，开始检测是否打卡成功");
+                List<AccessibilityNodeInfo> listView = findNodeById(Constant.BODY_TITLE);
+                int size = listView.size();
+                if (size > 0) {
+                    AccessibilityNodeInfo info = listView.get(size - 1);
+                    String checkInfo = info.getText().toString();
+                    LogUtils.d("$$$ 获取到的打卡情况信息为： " + checkInfo);
+
+                    String dateString = checkInfo.substring(0, checkInfo.indexOf(" "));
+                    if (Operation.isToday(dateString, "yyy年MM月dd日") && checkInfo.contains(Constant.SUCCESS)) {
+                        LogUtils.d("$$$ 今天极速打卡成功");
+                        Account.setIsCheckInToday(true, this);
+                        Operation.sendEmail(this);
+                        Operation.backToHome(this);
+                    }else {
+                        LogUtils.d("极速打卡未成功");
+                    }
+                }
+            }
         }
     }
 
@@ -234,14 +210,13 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
-
-    public List<AccessibilityNodeInfo> findNodeById(String id) {
+    public List<AccessibilityNodeInfo> findNodeById(final String id) {
         AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
+
         try {
             return rootInActiveWindow.findAccessibilityNodeInfosByViewId(id);
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtils.e(e);
             return new ArrayList<>();
         }
     }
