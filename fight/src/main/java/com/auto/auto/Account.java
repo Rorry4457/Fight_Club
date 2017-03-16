@@ -73,7 +73,7 @@ public class Account implements Serializable {
     }
 
     public boolean hasAlreadySavedLoginInfo() {
-        return (!phoneNum.isEmpty() && !dingDingPassword.isEmpty() && !authAccount.isEmpty() && !authAccountPassword.isEmpty());
+        return (!phoneNum.isEmpty() && !dingDingPassword.isEmpty() && !authAccount.isEmpty() && !authAccountPassword.isEmpty() && !mail.isEmpty());
     }
 
     public void saveAccountInfo(Account account, Context context) {

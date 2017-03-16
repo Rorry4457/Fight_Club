@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.newland.support.nllogger.LogUtils;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private EditText phoneNumber;
     private EditText dindinPassword;
