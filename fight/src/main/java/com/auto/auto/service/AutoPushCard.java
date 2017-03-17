@@ -175,7 +175,7 @@ public class AutoPushCard extends AccessibilityService {
                         Account.setIsCheckInToday(true, this);
                         Operation.sendEmail(this);
                         Operation.backToHome(this);
-                    }else {
+                    } else {
                         LogUtils.d("极速打卡未成功");
                     }
                 }

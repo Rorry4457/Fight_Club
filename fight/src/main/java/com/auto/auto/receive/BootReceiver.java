@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.auto.auto.Account;
 import com.auto.auto.CheckListener;
+import com.auto.auto.Operation;
 import com.auto.auto.Util.AlarmClock;
 import com.newland.support.nllogger.LogUtils;
 
@@ -23,6 +24,8 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         LogUtils.d("$$$ 收到开机广播");
         Account.setIsCheckInToday(false, context);
+
+        Operation.turnOnWifiWhenOff(context);
 
         CheckListener checkListener = new CheckListener();
         AlarmClock.getInstance().delayCheckIn(context, MIN_DELAY, MAX_DELAY, checkListener);

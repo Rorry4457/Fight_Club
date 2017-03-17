@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
@@ -32,7 +33,7 @@ public class Operation {
     private static final String MAIN_MAIL_PASSWORD = "ELDao3xmgj";
     private static final String MAIN_BODY = "嗡 嘛 呢 呗 咪 吽 临 兵 斗 者 皆 阵 列 在 前";
 
-    public static void startCheckOutOperation(Context context) {
+    static void startCheckOutOperation(Context context) {
 
         LogUtils.d("$$$ 下班打卡");
         MediaPlayer mp = MediaPlayer.create(context, R.raw.check_out_sound);
@@ -43,7 +44,7 @@ public class Operation {
         System.out.println("Operation.startCheckOutOperation");
     }
 
-    public static void startCheckInOperation(final Context context) {
+    static void startCheckInOperation(final Context context) {
 
         LogUtils.d("$$$ 上班打卡");
         lightUpScreen(context);
@@ -53,7 +54,6 @@ public class Operation {
                 openDingDing(context);
             }
         });
-
     }
 
     private static void lightUpScreen(Context context) {
@@ -65,6 +65,12 @@ public class Operation {
         LogUtils.d("$$$ 点亮屏幕");
         //释放
         wl.release();
+    }
+
+    public static boolean turnOnWifiWhenOff(Context context) {
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+        return wifiManager.isWifiEnabled() || wifiManager.setWifiEnabled(true);
     }
 
     public static boolean isToday(String dateString, String formatType) {
@@ -108,7 +114,7 @@ public class Operation {
         }).start();
     }
 
-    public static void openDingDing(Context context) {
+    private static void openDingDing(Context context) {
 
         LogUtils.d("$$$ 打开钉钉");
         if (isAppInstalled(context, Constant.DING_PACKAGE_NAME)) {
@@ -146,7 +152,7 @@ public class Operation {
         }
     }
 
-    public static void sendEmailTo(final String[] mailAddresses, final boolean isSuccess) {
+    private static void sendEmailTo(final String[] mailAddresses, final boolean isSuccess) {
 
         LogUtils.d("$$$ 开始发送邮件");
         new Thread(new Runnable() {
@@ -187,7 +193,7 @@ public class Operation {
         return "系统测试报告，请注意查收  " + dateTime;
     }
 
-    public static String createMailBody() {
+    private static String createMailBody() {
 
         String body = "";
 
