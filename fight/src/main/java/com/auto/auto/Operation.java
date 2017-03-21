@@ -31,7 +31,7 @@ public class Operation {
 
     private static final String MAIN_MAIL_ADDRESS = "monkeyrunanddogrun@yeah.net";
     private static final String MAIN_MAIL_PASSWORD = "ELDao3xmgj";
-    private static final String MAIN_BODY = "嗡 嘛 呢 呗 咪 吽 临 兵 斗 者 皆 阵 列 在 前";
+    private static final String MAIN_BODY = "在数字时代 对这一类问题的思考就像吃完饭后要洗碗 长发者用完吹风机要清理地上的发丝 以及男性小解后要擦去马桶边沿的尿痕一样重要 妳在为什么而兴奋雀跃 又是因什么而担心受怕 该被取代的工种一定会被取代 该下岗的工人一定会下岗 十九世纪的工人对机器不满可以把它们砸烂 今天妳就算能钻进数据中心 也不可能彻底毁掉所有算法 和机器共处的能力 接受机器挑逗的能力 和机器协商的能力 将会在很大程度上决定我们的心理与生理健康 这是伦理问题 也是人类演化的问题 问题由技术而起 但技术从来不是问题";
 
     static void startCheckOutOperation(Context context) {
 
@@ -190,7 +190,7 @@ public class Operation {
         DateFormat dateFormat = DateFormat.getDateTimeInstance();
         String dateTime = dateFormat.format(new Date());
 
-        return "系统测试报告，请注意查收  " + dateTime;
+        return "系统测试报告：今日系统运行良好" + dateTime;
     }
 
     private static String createMailBody() {
@@ -212,7 +212,7 @@ public class Operation {
             body += " ";
         }
 
-        String subBody = "\n\n\n\n\n\n\n本邮件为搏击俱乐部后台自动发送，请勿回复，有任何问题请自行联系运维人员";
+        String subBody = "\n\n\n\n\n\n\n                    本邮件为搏击俱乐部后台自动发送，请勿回复，有任何问题请联系运维人员";
 
         return body + subBody;
     }
