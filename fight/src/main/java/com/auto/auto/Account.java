@@ -72,14 +72,6 @@ public class Account implements Serializable {
         return isCheckInToday;
     }
 
-    public boolean isDebug() {
-        return isDebug;
-    }
-
-    public void setDebug(boolean debug) {
-        isDebug = debug;
-    }
-
     public boolean hasAlreadySavedLoginInfo() {
         return (!phoneNum.isEmpty() && !dingDingPassword.isEmpty() && !authAccount.isEmpty() && !authAccountPassword.isEmpty() && !mail.isEmpty());
     }
@@ -141,5 +133,4 @@ public class Account implements Serializable {
     private String mail = "";
     private String authAccountPassword = "";
     private boolean isCheckInToday = false;
-    private boolean isDebug = false;
 }

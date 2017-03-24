@@ -43,7 +43,6 @@ public class Operation {
 
         lightUpScreen(context);
         openDingDing(context);
-        System.out.println("Operation.startCheckOutOperation");
     }
 
     static void startCheckInOperation(final Context context) {
@@ -53,6 +52,7 @@ public class Operation {
         authIn(context, new Runnable() {
             @Override
             public void run() {
+                HttpUtil.ping();
                 openDingDing(context);
             }
         });

@@ -1,5 +1,7 @@
 package com.auto.auto.Util;
 
+import com.newland.support.nllogger.LogUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,5 +89,29 @@ public class HttpUtil {
         }
         resultData = new String(byteArrayOutputStream.toByteArray());
         return resultData;
+    }
+
+    public static boolean ping() {
+
+        String result = null;
+        try {
+            String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
+            Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping网址3次
+
+            int status = p.waitFor();
+            if (status == 0) {
+                result = "畅通";
+                return true;
+            } else {
+                result = "异常";
+            }
+        } catch (IOException e) {
+            result = "IOException";
+        } catch (InterruptedException e) {
+            result = "InterruptedException";
+        } finally {
+            LogUtils.d("$$$ 网络情况 : " + result);
+        }
+        return false;
     }
 }
