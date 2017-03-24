@@ -17,10 +17,12 @@ import com.newland.support.nllogger.LogUtils;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,6 +56,27 @@ public class Operation {
                 openDingDing(context);
             }
         });
+    }
+
+    public static boolean isInWorkingDuration() {
+
+        Long currentTime = System.currentTimeMillis();
+
+        Time now = new Time(currentTime);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Time minLimit = new Time(calendar.getTimeInMillis());
+
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Time maxLimit = new Time(calendar.getTimeInMillis());
+
+        return now.after(minLimit) && now.before(maxLimit);
     }
 
     private static void lightUpScreen(Context context) {

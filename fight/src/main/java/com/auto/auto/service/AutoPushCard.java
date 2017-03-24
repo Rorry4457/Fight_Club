@@ -30,7 +30,9 @@ public class AutoPushCard extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
 
-        // TODO: 2017/3/24 加入服务可用的时间限制，防止非打卡时间内打开钉钉不能正常使用
+        if (!Operation.isInWorkingDuration()) {
+            return;
+        }
 
         int eventType = accessibilityEvent.getEventType();
         String packageName = accessibilityEvent.getPackageName().toString();
