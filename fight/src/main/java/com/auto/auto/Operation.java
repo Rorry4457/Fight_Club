@@ -141,12 +141,23 @@ public class Operation {
         }
     }
 
-    public static void sendEmail(Context context) {
+    public static void sendSuccessEmail(Context context) {
 
         String mail = Account.getAccountInfo(context).getMail();
 
         if (!TextUtils.isEmpty(mail)) {
             Operation.sendEmailTo(new String[]{mail}, true);
+        } else {
+            LogUtils.d("$$$ 邮箱地址为空");
+        }
+    }
+
+    public static void sendFailEmail(Context context) {
+
+        String mail = Account.getAccountInfo(context).getMail();
+
+        if (!TextUtils.isEmpty(mail)) {
+            Operation.sendEmailTo(new String[]{mail}, false);
         } else {
             LogUtils.d("$$$ 邮箱地址为空");
         }
@@ -162,7 +173,7 @@ public class Operation {
 
                 mail.setTo(mailAddresses);
                 mail.setFrom(MAIN_MAIL_ADDRESS);
-                mail.setSubject(createMailSubject());
+                mail.setSubject(createMailSubject(isSuccess));
 
                 if (isSuccess) {
                     mail.setBody(createMailBody());
@@ -185,12 +196,16 @@ public class Operation {
         }).start();
     }
 
-    private static String createMailSubject() {
+    private static String createMailSubject(boolean isSuccess) {
 
         DateFormat dateFormat = DateFormat.getDateTimeInstance();
         String dateTime = dateFormat.format(new Date());
 
-        return "系统测试报告：今日系统运行良好" + dateTime;
+        if (isSuccess) {
+            return "系统测试报告：今日系统运行良好" + dateTime;
+        } else {
+            return "系统测试报告：今日系统故障" + dateTime;
+        }
     }
 
     private static String createMailBody() {

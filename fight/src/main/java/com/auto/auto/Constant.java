@@ -49,4 +49,5 @@ public class Constant {
     //
     public static final String SUCCESS = "上班极速打卡成功";
     public static final String DEPARTMENT = "工作通知:新大陆支付-云端支付-系统研发部";//部门标题
+    public static final String FAIL = "别忘记打卡哦";
 }

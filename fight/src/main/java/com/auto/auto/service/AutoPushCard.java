@@ -23,16 +23,14 @@ import java.util.List;
  */
 public class AutoPushCard extends AccessibilityService {
 
-    public static String TAG = AutoPushCard.class.getSimpleName();
     boolean isLoginOperate = false;
     boolean isSetSchedul = false;
-    private static int IN_Y_COORDINATES = 600;
-    private static int OUT_Y_COORDINATES = 890;
-    private static int CENTER_X_COORDINATES = 360;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+
+        // TODO: 2017/3/24 加入服务可用的时间限制，防止非打卡时间内打开钉钉不能正常使用
 
         int eventType = accessibilityEvent.getEventType();
         String packageName = accessibilityEvent.getPackageName().toString();
@@ -41,7 +39,7 @@ public class AutoPushCard extends AccessibilityService {
             autoLogin();
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             openWorkNotificationPage();
-            //打开二级页面后会再次Window State Change 在此检查是否已打卡成功，
+            //界面的切换回多次调用，在这里进行是都打卡成功的检测，比较妥当
             isAlreadyCheckIn();
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.SETTING.equals(packageName)) {
 //            System.out.println("packageName = " + packageName);
@@ -90,7 +88,7 @@ public class AutoPushCard extends AccessibilityService {
                         @Override
                         public void run() {
                             if (isCheckFinished()) {
-                                Operation.sendEmail(AutoPushCard.this);
+                                Operation.sendSuccessEmail(AutoPushCard.this);
                             }
                         }
                     });
@@ -169,15 +167,21 @@ public class AutoPushCard extends AccessibilityService {
                     String checkInfo = info.getText().toString();
                     LogUtils.d("$$$ 获取到的打卡情况信息为： " + checkInfo);
 
-                    String dateString = checkInfo.substring(0, checkInfo.indexOf(" "));
-                    if (Operation.isToday(dateString, "yyy年MM月dd日") && checkInfo.contains(Constant.SUCCESS)) {
-                        LogUtils.d("$$$ 今天极速打卡成功");
-                        Account.setIsCheckInToday(true, this);
-                        Operation.sendEmail(this);
-                        Operation.backToHome(this);
+                    if (checkInfo.contains(Constant.SUCCESS)) {
+                        String dateString = checkInfo.substring(0, checkInfo.indexOf(" "));
+                        if (Operation.isToday(dateString, "yyyy年MM月dd日")) {
+                            LogUtils.d("$$$ 今天极速打卡成功");
+                            Account.setIsCheckInToday(true, this);
+                            Operation.sendSuccessEmail(this);
+                        }
+
+                    } else if (checkInfo.contains(Constant.FAIL)) {
+                        LogUtils.d("$$$ 极速打卡未成功");
+                        Operation.sendFailEmail(this);
                     } else {
-                        LogUtils.d("极速打卡未成功");
+                        LogUtils.d("$$$ 检测到未知的事件类型" + checkInfo);
                     }
+                    Operation.backToHome(this);
                 }
             }
         }
