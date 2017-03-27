@@ -171,7 +171,7 @@ public class AutoPushCard extends AccessibilityService {
 
                     if (checkInfo.contains(Constant.SUCCESS)) {
                         String dateString = checkInfo.substring(0, checkInfo.indexOf(" "));
-                        if (Operation.isToday(dateString, "yyyy年MM月dd日")) {
+                        if (Operation.isToday(dateString)) {
                             LogUtils.d("$$$ 今天极速打卡成功");
                             Account.setIsCheckInToday(true, this);
                             Operation.sendSuccessEmail(this);

@@ -96,22 +96,45 @@ public class Operation {
         return wifiManager.isWifiEnabled() || wifiManager.setWifiEnabled(true);
     }
 
-    public static boolean isToday(String dateString, String formatType) {
+    public static boolean isToday(String dateString) {
 
-        SimpleDateFormat format = new SimpleDateFormat(formatType);
-        Date date = null;
-
-        try {
-            date = format.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (TextUtils.isEmpty(dateString)) {
+            return false;
         }
 
-        if (date != null) {
-            return DateUtils.isToday(date.getTime());
+        int yearIndex = dateString.indexOf("年");
+        int monthIndex = dateString.indexOf("月");
+        int dayIndex = dateString.indexOf("日");
+
+        if (yearIndex == -1 && monthIndex == -1 && dayIndex == -1) {
+            return false;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+
+        if (yearIndex != -1) {
+            String year = dateString.substring(0, yearIndex);
+            calendar.set(Calendar.YEAR, Integer.valueOf(year));
+
+        }else {
+            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+        }
+
+        if (monthIndex != -1) {
+            String month = dateString.substring(yearIndex + 1, monthIndex);
+            calendar.set(Calendar.MONTH, Integer.valueOf(month) - 1);
         } else {
             return false;
         }
+
+        if (dayIndex != -1) {
+            String day = dateString.substring(monthIndex + 1, dayIndex);
+            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
+        } else {
+            return false;
+        }
+
+        return DateUtils.isToday(calendar.getTimeInMillis());
     }
 
     private static void authIn(final Context context, final Runnable uiRunnable) {
