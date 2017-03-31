@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
+    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <!--<item name="colorPrimary">@color/colorPrimary</item>-->
         <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
@@ -14,6 +14,5 @@
         <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
 
     </style>
-
 
 </resources>

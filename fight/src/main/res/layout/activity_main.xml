@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/step_one" />
+            android:text="@string/step_one"
+            android:textSize="22sp" />
 
         <EditText
             android:id="@+id/phone_number"
@@ -71,7 +72,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/step_two" />
+            android:text="@string/step_two"
+            android:textSize="22sp" />
 
         <Button
             android:id="@+id/btn_accessibility"
@@ -89,7 +91,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/step_three" />
+            android:text="@string/step_three"
+            android:textSize="22sp" />
 
         <Button
             android:id="@+id/btn_schedule"
@@ -101,20 +104,22 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="16dp"
             android:layout_weight="1" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rule_one"
-            android:textSize="10sp" />
+            android:textSize="12sp"
+            android:textColor="@android:color/holo_red_light"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rule_two"
-            android:textSize="10sp" />
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_red_dark"/>
 
     </LinearLayout>
 
