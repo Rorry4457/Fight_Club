@@ -74,7 +74,7 @@ public class AlarmClock {
      * @param action
      * @param requestCode
      */
-    public void startAtTime(Context context, long timestamp, TimeoutListener timeoutListener, String action, int requestCode) {
+    private void startAtTime(Context context, long timestamp, TimeoutListener timeoutListener, String action, int requestCode) {
         this.timeoutAtTimeListener = timeoutListener;
         if (alarmManager == null) {
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -83,7 +83,7 @@ public class AlarmClock {
         Intent intent = new Intent(context, SendReceiver.class);
         intent.setAction(action);
         PendingIntent pending = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, timestamp, pending);
+        alarmManager.setWindow(AlarmManager.RTC_WAKEUP, timestamp, 0, pending);
     }
 
     /**
@@ -108,11 +108,11 @@ public class AlarmClock {
     }
 
     public void wakeUpCheckOut(Context context, TimeoutListener timeoutListener) {
-//        long timeStamp = System.currentTimeMillis() + 30 * 1000;
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, Constant.HOUR_OF_CHECK_OUT);
         calendar.set(Calendar.MINUTE, Constant.MINUTE_OF_CHECK_OUT);
+        calendar.set(Calendar.SECOND,Constant.SECOND_OF_CHECK_OUT);
         long timeStamp = calendar.getTimeInMillis();
 
         LogUtils.d("$$$ 将在 " + predictCheckInTime(timeStamp) + " 提醒下班");
@@ -132,7 +132,7 @@ public class AlarmClock {
         return (int) (Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;
     }
 
-    public void timeoutAtTime(Context context, Intent intent, int requestCode) {
+    private void timeoutAtTime(Context context, Intent intent, int requestCode) {
         try {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.cancel(pendingIntent);

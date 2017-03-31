@@ -1,8 +1,5 @@
 package com.auto.auto;
 
-/**
- * Created by x on 2016/11/3.
- */
 public class Constant {
 
     public static final String DING_PACKAGE_NAME = "com.alibaba.android.rimet"; //钉钉的包名
@@ -40,8 +37,8 @@ public class Constant {
 
     //Time
     public static final int HOUR_OF_CHECK_OUT = 17;
-
     public static final int MINUTE_OF_CHECK_OUT = 45;
+    public static final int SECOND_OF_CHECK_OUT = 5;
     //RequestCode
     public static final int CHECK_IN = 1001;
 
