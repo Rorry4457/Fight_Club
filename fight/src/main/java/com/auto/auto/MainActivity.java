@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.auto.auto.Model.Account;
 import com.newland.support.nllogger.LogUtils;
 
 

@@ -17,13 +17,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <service
             android:name=".service.AutoPushCard"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -39,6 +33,7 @@
         <receiver android:name=".receive.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
@@ -48,6 +43,17 @@
                 <action android:name="com.fight.club.check.out" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

@@ -10,7 +10,7 @@ import android.os.Looper;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.auto.auto.Account;
+import com.auto.auto.Model.Account;
 import com.auto.auto.Constant;
 import com.auto.auto.Operation;
 import com.newland.support.nllogger.LogUtils;
@@ -18,9 +18,6 @@ import com.newland.support.nllogger.LogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by x on 2016/11/1.
- */
 public class AutoPushCard extends AccessibilityService {
 
     boolean isLoginOperate = false;
@@ -41,7 +38,7 @@ public class AutoPushCard extends AccessibilityService {
             autoLogin();
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             openWorkNotificationPage();
-            //界面的切换回多次调用，在这里进行是都打卡成功的检测，比较妥当
+            //界面的切换回多次调用，在这里进行是否打卡成功的检测，比较妥当
             isAlreadyCheckIn();
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.SETTING.equals(packageName)) {
 //            System.out.println("packageName = " + packageName);
@@ -175,8 +172,10 @@ public class AutoPushCard extends AccessibilityService {
                             LogUtils.d("$$$ 今天极速打卡成功");
                             Account.setIsCheckInToday(true, this);
                             Operation.sendSuccessEmail(this);
+                        } else {
+                            LogUtils.d("$$$ 获取到的打卡信息 不是今天的信息 将尝试重新获取");
+                            return;
                         }
-
                     } else if (checkInfo.contains(Constant.FAIL)) {
                         LogUtils.d("$$$ 极速打卡未成功");
                         Operation.sendFailEmail(this);

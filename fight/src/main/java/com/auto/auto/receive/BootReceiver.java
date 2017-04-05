@@ -4,15 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.auto.auto.Account;
+import com.auto.auto.Model.Account;
 import com.auto.auto.CheckListener;
 import com.auto.auto.Operation;
 import com.auto.auto.Util.AlarmClock;
 import com.newland.support.nllogger.LogUtils;
 
-/**
- * Created by x on 2016/11/2.
- */
 public class BootReceiver extends BroadcastReceiver {
     private static int MAX_DELAY = 6 * 60;
     private static int MIN_DELAY = 3 * 60;

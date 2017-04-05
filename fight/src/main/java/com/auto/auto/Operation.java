@@ -11,6 +11,7 @@ import android.os.PowerManager;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 
+import com.auto.auto.Model.Account;
 import com.auto.auto.Util.HttpUtil;
 import com.auto.auto.Util.Mail;
 import com.newland.support.nllogger.LogUtils;
@@ -19,8 +20,6 @@ import java.io.DataOutputStream;
 import java.io.OutputStream;
 import java.sql.Time;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
