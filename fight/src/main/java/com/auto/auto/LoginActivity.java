@@ -19,7 +19,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     RecyclerView loginControl;
-    private static final String name = "FightClub";
+    private static final String name = "FIGHTCLUB";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

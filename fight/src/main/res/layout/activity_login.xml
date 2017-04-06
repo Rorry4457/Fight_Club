@@ -19,67 +19,24 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="72dp"
-            android:orientation="horizontal">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+        <EditText
+            style="@style/FakeEditTextStyle"
+            android:hint="@string/phone_number" />
 
-            <EditText
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@android:color/white" />
-
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <EditText
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@android:color/white" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-
-            <EditText
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@android:color/white" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <EditText
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@android:color/white" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-        </LinearLayout>
+        <EditText
+            style="@style/FakeEditTextStyle"
+            android:hint="@string/password" />
 
         <Button
             android:id="@+id/login"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="login" />
+            android:layout_marginTop="18dp"
+            android:background="@drawable/btn_round_corner"
+            android:text="login"
+            android:textColor="@drawable/btn_text_color" />
     </LinearLayout>
 </ScrollView>
 
