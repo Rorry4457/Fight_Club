@@ -25,6 +25,8 @@
             android:hint="@string/phone_number" />
 
         <EditText
+            android:id="@+id/password"
+            android:inputType="numberPassword"
             style="@style/FakeEditTextStyle"
             android:hint="@string/password" />
 

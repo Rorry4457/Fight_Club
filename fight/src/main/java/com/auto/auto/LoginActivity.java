@@ -9,12 +9,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.auto.auto.Adapater.LoginAdapter;
 import com.auto.auto.Model.LoginItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,11 +34,20 @@ public class LoginActivity extends AppCompatActivity {
         loginControl.setAdapter(new LoginAdapter(makeLoginInfo()));
         loginControl.setItemAnimator(new DefaultItemAnimator());
 
-        View login = findViewById(R.id.login);
-        login.setOnClickListener(new View.OnClickListener() {
+        final EditText passwordEditText = (EditText) findViewById(R.id.password);
+
+        View loginBtn = findViewById(R.id.login);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMainActivity();
+
+                String password = passwordEditText.getText().toString();
+
+                if (password.equals("998877")) {
+                    startMainActivity();
+                }else {
+                    Toast.makeText(LoginActivity.this, "Wrong", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
