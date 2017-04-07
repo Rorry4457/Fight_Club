@@ -12,10 +12,6 @@ import com.auto.auto.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Rorry on 2017/4/5.
- */
-
 public class LoginAdapter extends RecyclerView.Adapter<LoginViewHolder> {
 
     private List<LoginItem> itemList = new ArrayList<>();

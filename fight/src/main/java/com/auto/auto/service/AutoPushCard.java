@@ -36,6 +36,7 @@ public class AutoPushCard extends AccessibilityService {
 
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             autoLogin();
+            closeWebAlert();
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
             openWorkNotificationPage();
             //界面的切换回多次调用，在这里进行是否打卡成功的检测，比较妥当
@@ -212,6 +213,18 @@ public class AutoPushCard extends AccessibilityService {
             LogUtils.d("$$$ 完成输入账户信息");
             loginBtn.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
             LogUtils.d("$$$ 开始登录");
+        }
+    }
+
+    private void closeWebAlert() {
+
+        List<AccessibilityNodeInfo> closeBtn = findNodeById(Constant.CLOSE_BTN);
+        if (closeBtn != null && closeBtn.size() > 0) {
+            LogUtils.d("$$$ 发现web Alert 执行关闭操作");
+            AccessibilityNodeInfo button = closeBtn.get(0);
+            button.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        }else {
+           LogUtils.d("$$$ 未发现web Alert");
         }
     }
 

@@ -9,10 +9,6 @@ import android.widget.TextView;
 
 import com.auto.auto.R;
 
-/**
- * Created by Rorry on 2017/4/5.
- */
-
 public class LoginViewHolder extends RecyclerView.ViewHolder {
     private TextView leftTextView;
     private TextView rightTextView;

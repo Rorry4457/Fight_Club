@@ -20,6 +20,9 @@ public class Constant {
     public static final String WORK_LAYOUT = "com.alibaba.android.rimet:id/oa_fragment_gridview"; // 考勤打卡模块fragment layout id
 
     public static final String WORK_LAYOUT_ITEM = "com.alibaba.android.rimet:id/oa_entry_inner_layout"; // 考勤打卡模块每一个小块的名称
+
+    public static final String CLOSE_BTN = "com.alibaba.android.rimet:id/close";
+    public static final String WEB_ALERT = "com.alibaba.android.rimet:id/webview_container";
     //key
     public static final String ACCOUNT = "com.fight.club.account";
 

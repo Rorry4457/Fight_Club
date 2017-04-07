@@ -1,9 +1,5 @@
 package com.auto.auto.Model;
 
-/**
- * Created by Rorry on 2017/4/5.
- */
-
 public class LoginItem {
 
     public String getLeftText() {
