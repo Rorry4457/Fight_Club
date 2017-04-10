@@ -25,7 +25,12 @@ public class BootReceiver extends BroadcastReceiver {
         Operation.turnOnWifiWhenOff(context);
 
         CheckListener checkListener = new CheckListener();
-        AlarmClock.getInstance().delayCheckIn(context, MIN_DELAY, MAX_DELAY, checkListener);
+
+        //仅在打卡时间内开机才会进行「延时上班打卡」防止出现迟到后开机自动打卡钉钉 打迟到卡的情况
+        if (Operation.isInWorkingDuration()) {
+            AlarmClock.getInstance().delayCheckIn(context, MIN_DELAY, MAX_DELAY, checkListener);
+        }
+
         AlarmClock.getInstance().wakeUpCheckOut(context, checkListener);
     }
 }
