@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="com.auto.auto.LoginActivity">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/login_control"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+        <EditText
+            style="@style/FakeEditTextStyle"
+            android:hint="@string/phone_number" />
+
+        <EditText
+            android:id="@+id/password"
+            android:inputType="numberPassword"
+            style="@style/FakeEditTextStyle"
+            android:hint="@string/password" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/btn_round_corner"
+            android:text="login"
+            android:textColor="@drawable/btn_text_color" />
+    </LinearLayout>
+</ScrollView>
+
