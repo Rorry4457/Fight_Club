@@ -6,3 +6,6 @@
 .DS_Store
 /build
 /captures
+README.md
+vcs.xml
+gradle.xml
