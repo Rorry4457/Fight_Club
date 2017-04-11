@@ -5,7 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,36 +70,48 @@ public class FirstFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View rootView = inflater.inflate(R.layout.fragment_first, container, false);
-        dingTalkAccountEditText = (EditText) rootView.findViewById(R.id.dingTalkAccount);
-        dingTalkPasswordEditText = (EditText) rootView.findViewById(R.id.dingTalkPassword);
-        authAccountEditText = (EditText) rootView.findViewById(R.id.authAccount);
-        authAccountPasswordEditText = (EditText) rootView.findViewById(R.id.authAccountPassword);
-        eMailEditText = (EditText) rootView.findViewById(R.id.eMail);
-
-        eMailEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (isInfoEnough()) {
-                        listener.onInfoEnough();
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-        return rootView;
+        return inflater.inflate(R.layout.fragment_first, container, false);
     }
+
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        dingTalkAccountEditText = (EditText) view.findViewById(R.id.dingTalkAccount);
+        dingTalkPasswordEditText = (EditText) view.findViewById(R.id.dingTalkPassword);
+        authAccountEditText = (EditText) view.findViewById(R.id.authAccount);
+        authAccountPasswordEditText = (EditText) view.findViewById(R.id.authAccountPassword);
+        eMailEditText = (EditText) view.findViewById(R.id.eMail);
+
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                listener.onEditContentChanged(isInfoEnough());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        dingTalkAccountEditText.addTextChangedListener(watcher);
+        dingTalkPasswordEditText.addTextChangedListener(watcher);
+        authAccountEditText.addTextChangedListener(watcher);
+        authAccountPasswordEditText.addTextChangedListener(watcher);
+        eMailEditText.addTextChangedListener(watcher);
+    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -116,7 +130,7 @@ public class FirstFragment extends Fragment {
         listener = null;
     }
 
-    public interface OnFirstFragmentListener{
-        void onInfoEnough();
+    public interface OnFirstFragmentListener {
+        void onEditContentChanged(boolean isInfoEnough);
     }
 }

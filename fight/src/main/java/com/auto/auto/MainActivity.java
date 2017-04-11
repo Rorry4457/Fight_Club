@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements FirstFragment.OnFirstFragmentListener{
+public class MainActivity extends AppCompatActivity implements FirstFragment.OnFirstFragmentListener {
 
 //    private EditText phoneNumber;
 //    private EditText dindinPassword;
@@ -204,12 +204,18 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
     }
 
     @Override
-    public void onInfoEnough() {
+    public void onEditContentChanged(boolean isInfoEnough) {
+        System.out.println("isInfoEnough = " + isInfoEnough);
 
         SteppersItem item = steppersItems.get(1);
-        item.setPositiveButtonEnable(true);
 
-        InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        manager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        if (isInfoEnough) {
+            item.setPositiveButtonEnable(true);
+
+        } else {
+            if (item.isPositiveButtonEnable()) {
+                item.setPositiveButtonEnable(false);
+            }
+        }
     }
 }
