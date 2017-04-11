@@ -3,13 +3,26 @@
     <string name="phone_number">PhoneNum</string>
     <string name="password">Password</string>
     <string name="email">E_mail</string>
-    <string name="authAccount">Network Authorization Account</string>
+    <string name="authAccountEditText">Network Authorization Account</string>
     <string name="set_time">Set Schdule Boot Time</string>
     <string name="open_accessibility">Open Accessibility</string>
+    <string name="step_zero">Zero Step :</string>
+    <string name="step_zero_instruction">Read These Rules Very Carefully</string>
     <string name="step_one">First Step :</string>
+    <string name="step_one_instruction">Fill Your Info</string>
     <string name="step_two">Second Step :</string>
+    <string name="step_two_instruction">Turn On Accessibility</string>
     <string name="step_three">Third Step :</string>
+    <string name="step_three_instruction">Schdule Your Device Boot Time</string>
     <string name="save_login_info">Save Info</string>
     <string name="rule_one">1st RULE: You do not talk about FIGHT CLUB.</string>
     <string name="rule_two">2nd RULE: You DO NOT talk about FIGHT CLUB.</string>
+
+    <string name="font_fontFamily_medium">sans-serif</string>
+    <string name="step_cancel">Cancel</string>
+    <string name="step_continue">Continue</string>
+    <string name="step_finish">Finish</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

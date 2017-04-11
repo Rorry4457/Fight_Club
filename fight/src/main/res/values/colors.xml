@@ -11,4 +11,7 @@
     <color name="light_green">#72bca5</color>114	188	165
     <color name="dark_red">#9b414d</color>155	65	77
     <color name="light_red">#c3505e</color>195	80	94
+    <color name="circle_color_default_blue">#4184F3</color>
+    <color name="circle_color_default_gray">#BDBDBD</color>
+    <color name="transparent">#00ffffff</color>
 </resources>
