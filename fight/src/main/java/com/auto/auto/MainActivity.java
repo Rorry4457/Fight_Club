@@ -48,10 +48,8 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
         config.setOnFinishAction(new OnFinishAction() {
             @Override
             public void onFinish() {
-
-                System.out.println("on Finish");
-
-                // TODO: 2017/4/11 切换到结果页
+                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -104,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
         return config;
     }
 
-
     private List<SteppersItem> createSteps() {
 
         ArrayList<SteppersItem> steps = new ArrayList<>();
@@ -133,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
         thirdFragment.setOneButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.gotoAccessibilitySettings(MainActivity.this);
+                Operation.openAccessibilitySetting(MainActivity.this);
             }
         });
 
@@ -174,24 +171,6 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
         LogUtils.d("$$$ 账户信息已保存");
     }
 
-    /**
-     * 跳转到系统辅助功能设置页面.<br>
-     *
-     * @param context
-     */
-    private static boolean gotoAccessibilitySettings(Context context) {
-        Intent settingsIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-        if (!(context instanceof Activity)) {
-            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        boolean isOk = true;
-        try {
-            context.startActivity(settingsIntent);
-        } catch (ActivityNotFoundException e) {
-            isOk = false;
-        }
-        return isOk;
-    }
 
     private void backToLoginActivity(Context context) {
 
