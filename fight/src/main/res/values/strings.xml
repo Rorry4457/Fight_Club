@@ -4,7 +4,7 @@
     <string name="password">Password</string>
     <string name="email">E_mail</string>
     <string name="authAccountEditText">Network Authorization Account</string>
-    <string name="set_time">Set Schdule Boot Time</string>
+    <string name="set_time">Set Schedule Boot Time</string>
     <string name="open_accessibility">Open Accessibility</string>
     <string name="step_zero">Zero Step :</string>
     <string name="step_zero_instruction">Read These Rules Very Carefully</string>
@@ -13,11 +13,14 @@
     <string name="step_two">Second Step :</string>
     <string name="step_two_instruction">Turn On Accessibility</string>
     <string name="step_three">Third Step :</string>
-    <string name="step_three_instruction">Schdule Your Device Boot Time</string>
+    <string name="step_three_instruction">Schedule Your Device Boot Time</string>
     <string name="save_login_info">Save Info</string>
     <string name="rule_one">1st RULE: You do not talk about FIGHT CLUB.</string>
     <string name="rule_two">2nd RULE: You DO NOT talk about FIGHT CLUB.</string>
-
+    <string name="result_label">You\'ve ben a member of Fight Club</string>
+    <string name="result_subLabel">Welcome</string>
+    <string name="revert">Revert Info</string>
+    <string name="check_accessibility">Review Accessibility</string>
     <string name="font_fontFamily_medium">sans-serif</string>
     <string name="step_cancel">Cancel</string>
     <string name="step_continue">Continue</string>

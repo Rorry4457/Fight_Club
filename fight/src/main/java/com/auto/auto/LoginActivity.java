@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.auto.auto.Adapater.LoginAdapter;
+import com.auto.auto.Model.Account;
 import com.auto.auto.Model.LoginItem;
 
 import java.util.ArrayList;
@@ -44,8 +45,14 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
 
                 if (password.equals("998877")) {
-                    startMainActivity();
-                }else {
+
+                    Account account = Account.getAccountInfo(LoginActivity.this);
+                    if (account.hasAlreadySavedLoginInfo()) {
+                        startResultActivity();
+                    } else {
+                        startMainActivity();
+                    }
+                } else {
                     Toast.makeText(LoginActivity.this, "Wrong", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -55,6 +62,12 @@ public class LoginActivity extends AppCompatActivity {
     private void startMainActivity() {
 
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void startResultActivity() {
+        Intent intent = new Intent(this, ResultActivity.class);
         startActivity(intent);
         finish();
     }

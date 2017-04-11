@@ -1,5 +1,7 @@
 package com.auto.auto;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,6 +10,7 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 
@@ -95,6 +98,20 @@ public class Operation {
         return wifiManager.isWifiEnabled() || wifiManager.setWifiEnabled(true);
     }
 
+    public static boolean openAccessibilitySetting(Context context) {
+        Intent settingsIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        if (!(context instanceof Activity)) {
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        boolean isOk = true;
+        try {
+            context.startActivity(settingsIntent);
+        } catch (ActivityNotFoundException e) {
+            isOk = false;
+        }
+        return isOk;
+    }
+
     public static boolean isToday(String dateString) {
 
         if (TextUtils.isEmpty(dateString)) {
@@ -115,7 +132,7 @@ public class Operation {
             String year = dateString.substring(0, yearIndex);
             calendar.set(Calendar.YEAR, Integer.valueOf(year));
 
-        }else {
+        } else {
             calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
         }
 

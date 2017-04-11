@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_result"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_green"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.auto.auto.ResultActivity">
+
+    <TextView
+        android:id="@+id/dingTalkAccount"
+        style="@style/ResultTextViewStyle"
+        tools:text="12987312984" />
+
+    <TextView
+        android:id="@+id/authAccount"
+        style="@style/ResultTextViewStyle"
+        tools:text="chendssd" />
+
+    <TextView
+        android:id="@+id/eMail"
+        style="@style/ResultTextViewStyle"
+        tools:text="/@icloud.com" />
+
+
+    <Button
+        android:id="@+id/openAccessibility"
+        style="@style/ResultButtonStyle"
+        android:text="@string/check_accessibility" />
+
+    <Button
+        android:id="@+id/revert"
+        style="@style/ResultButtonStyle"
+        android:text="@string/revert" />
+
+
+</LinearLayout>
