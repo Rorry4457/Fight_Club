@@ -8,13 +8,10 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.auto.auto.R;
 
@@ -97,7 +94,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                listener.onEditContentChanged(isInfoEnough());
+                listener.onContentChanged(isInfoEnough());
             }
 
             @Override
@@ -131,6 +128,6 @@ public class FirstFragment extends Fragment {
     }
 
     public interface OnFirstFragmentListener {
-        void onEditContentChanged(boolean isInfoEnough);
+        void onContentChanged(boolean isInfoEnough);
     }
 }

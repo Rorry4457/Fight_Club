@@ -204,8 +204,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
     }
 
     @Override
-    public void onEditContentChanged(boolean isInfoEnough) {
-        System.out.println("isInfoEnough = " + isInfoEnough);
+    public void onContentChanged(boolean isInfoEnough) {
 
         SteppersItem item = steppersItems.get(1);
 
