@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
+import android.view.View;
 
 import com.auto.auto.Fragment.FirstFragment;
+import com.auto.auto.Fragment.OneButtonFragment;
 import com.auto.auto.Fragment.ZeroFragment;
 import com.auto.auto.Model.Account;
 import com.auto.auto.stepperview.OnCancelAction;
@@ -25,12 +25,6 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements FirstFragment.OnFirstFragmentListener {
-
-//    private EditText phoneNumber;
-//    private EditText dindinPassword;
-//    private EditText authAccount;
-//    private EditText authAccountPassword;
-//    private EditText eMail;
 
     private List<SteppersItem> steppersItems = new ArrayList<>();
 
@@ -134,7 +128,16 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
         SteppersItem secondStep = new SteppersItem();
         secondStep.setLabel(getString(R.string.step_two));
         secondStep.setSubLabel(getString(R.string.step_two_instruction));
-        secondStep.setFragment(null);
+
+        OneButtonFragment thirdFragment = OneButtonFragment.newInstance(getString(R.string.open_accessibility));
+        thirdFragment.setOneButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.gotoAccessibilitySettings(MainActivity.this);
+            }
+        });
+
+        secondStep.setFragment(thirdFragment);
         secondStep.setPositiveButtonEnable(true);
 
         steps.add(secondStep);
@@ -142,7 +145,15 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
         SteppersItem thirdStep = new SteppersItem();
         thirdStep.setLabel(getString(R.string.step_three));
         thirdStep.setLabel(getString(R.string.step_three_instruction));
-        thirdStep.setFragment(null);
+
+        OneButtonFragment forthFragment = OneButtonFragment.newInstance(getString(R.string.set_time));
+        forthFragment.setOneButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.openSettings(MainActivity.this);
+            }
+        });
+        thirdStep.setFragment(forthFragment);
         thirdStep.setPositiveButtonEnable(true);
 
         steps.add(thirdStep);
