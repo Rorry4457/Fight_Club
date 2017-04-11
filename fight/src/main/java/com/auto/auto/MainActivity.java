@@ -6,92 +6,161 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.support.v7.app.AppCompatActivity;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.auto.auto.Fragment.FirstFragment;
+import com.auto.auto.Fragment.ZeroFragment;
 import com.auto.auto.Model.Account;
+import com.auto.auto.stepperview.OnCancelAction;
+import com.auto.auto.stepperview.OnContinueAction;
+import com.auto.auto.stepperview.OnFinishAction;
+import com.auto.auto.stepperview.SteppersItem;
+import com.auto.auto.stepperview.SteppersView;
 import com.newland.support.nllogger.LogUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends Activity {
 
-    private EditText phoneNumber;
-    private EditText dindinPassword;
-    private EditText authAccount;
-    private EditText authAccountPassword;
-    private EditText eMail;
+public class MainActivity extends AppCompatActivity implements FirstFragment.OnFirstFragmentListener{
+
+//    private EditText phoneNumber;
+//    private EditText dindinPassword;
+//    private EditText authAccount;
+//    private EditText authAccountPassword;
+//    private EditText eMail;
+
+    private List<SteppersItem> steppersItems = new ArrayList<>();
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        phoneNumber = (EditText) findViewById(R.id.phone_number);
-        dindinPassword = (EditText) findViewById(R.id.password);
-        authAccount = (EditText) findViewById(R.id.authAccount);
-        authAccountPassword = (EditText) findViewById(R.id.account_password);
-        eMail = (EditText) findViewById(R.id.e_mail);
+        SteppersView.Config config = createStepViewConfig();
+        steppersItems = createSteps();
 
-        Button save = (Button) findViewById(R.id.save_login_info);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveLoginInfo();
-            }
-        });
-
-        Button openSetting = (Button) findViewById(R.id.btn_schedule);
-        openSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openSettings(MainActivity.this);
-            }
-        });
-
-        Button openAccessibility = (Button) findViewById(R.id.btn_accessibility);
-        openAccessibility.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gotoAccessibilitySettings(MainActivity.this);
-            }
-        });
-
-        Account savedAccount = Account.getAccountInfo(this);
-        if (savedAccount != null && savedAccount.hasAlreadySavedLoginInfo()) {
-            phoneNumber.setText(savedAccount.getPhoneNum());
-            dindinPassword.setText(savedAccount.getDingDingPassword());
-            authAccount.setText(savedAccount.getAuthAccount());
-            authAccountPassword.setText(savedAccount.getAuthAccountPassword());
-            eMail.setText(savedAccount.getMail());
-        }
+        SteppersView steppersView = (SteppersView) findViewById(R.id.stepperView);
+        steppersView.setConfig(config);
+        steppersView.setItems(steppersItems);
+        steppersView.build();
     }
 
-    private void saveLoginInfo() {
+    private SteppersView.Config createStepViewConfig() {
+        final SteppersView.Config config = new SteppersView.Config();
+        config.setOnFinishAction(new OnFinishAction() {
+            @Override
+            public void onFinish() {
 
-        String number = phoneNumber.getText().toString();
-        String pass = dindinPassword.getText().toString();
-        String ac = authAccount.getText().toString();
-        String acPass = authAccountPassword.getText().toString();
-        String mail = eMail.getText().toString();
+                System.out.println("on Finish");
 
-        if (!TextUtils.isEmpty(number) && !TextUtils.isEmpty(pass)) {
+                // TODO: 2017/4/11 切换到结果页
+            }
+        });
 
-            Account account = new Account();
-            account.setPhoneNum(number);
-            account.setDingDingPassword(pass);
-            account.setAuthAccount(ac);
-            account.setAuthAccountPassword(acPass);
-            account.setMail(mail);
+        config.setOnContinueAction(new OnContinueAction() {
+            @Override
+            public void onContinue(int position) {
+                switch (position) {
+                    case 1:
+                        SteppersItem item = steppersItems.get(position);
+                        FirstFragment fragment = (FirstFragment) item.getFragment();
 
-            account.saveAccountInfo(account, this);
-            Toast.makeText(this, "Info saved", Toast.LENGTH_SHORT).show();
-            LogUtils.d("$$$ 账户信息已保存");
-        } else {
-            Toast.makeText(this, "no enough info", Toast.LENGTH_SHORT).show();
-        }
+                        String dingTalkAccount = fragment.getDingTalkAccount();
+                        String dingTalkPassword = fragment.getDingTalkPassword();
+                        String authAccount = fragment.getAuthAccount();
+                        String authPassword = fragment.getAuthAccountPassword();
+                        String email = fragment.geteMail();
+
+                        saveLoginInfo(dingTalkAccount, dingTalkPassword, authAccount, authPassword, email);
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        config.setOnCancelAction(new OnCancelAction() {
+            @Override
+            public void onCancel(int position) {
+
+                switch (position) {
+                    case 0:
+                        backToLoginActivity(MainActivity.this);
+                        finish();
+                        break;
+                    case 1:
+                        SteppersItem item = steppersItems.get(position);
+                        item.setPositiveButtonEnable(true);
+                        // TODO: 2017/4/11 清除当前信息 回退到前一项
+                        break;
+                    default:
+                        // TODO: 2017/4/11 回退一项
+                        break;
+                }
+            }
+        });
+
+        config.setFragmentManager(getSupportFragmentManager());
+
+        return config;
+    }
+
+
+    private List<SteppersItem> createSteps() {
+
+        ArrayList<SteppersItem> steps = new ArrayList<>();
+
+        SteppersItem zeroStep = new SteppersItem();
+        zeroStep.setLabel(getString(R.string.step_zero));
+        zeroStep.setSubLabel(getString(R.string.step_zero_instruction));
+        zeroStep.setFragment(new ZeroFragment());
+        zeroStep.setPositiveButtonEnable(true);
+
+        steps.add(zeroStep);
+
+        SteppersItem firstStep = new SteppersItem();
+        firstStep.setLabel(getString(R.string.step_one));
+        firstStep.setSubLabel(getString(R.string.step_one_instruction));
+        firstStep.setFragment(new FirstFragment());
+        firstStep.setPositiveButtonEnable(false);
+
+        steps.add(firstStep);
+
+        SteppersItem secondStep = new SteppersItem();
+        secondStep.setLabel(getString(R.string.step_two));
+        secondStep.setSubLabel(getString(R.string.step_two_instruction));
+        secondStep.setFragment(null);
+        secondStep.setPositiveButtonEnable(true);
+
+        steps.add(secondStep);
+
+        SteppersItem thirdStep = new SteppersItem();
+        thirdStep.setLabel(getString(R.string.step_three));
+        thirdStep.setLabel(getString(R.string.step_three_instruction));
+        thirdStep.setFragment(null);
+        thirdStep.setPositiveButtonEnable(true);
+
+        steps.add(thirdStep);
+
+        return steps;
+    }
+
+    private void saveLoginInfo(String dingTalkAccount, String dingTalkPassword, String authAccount, String authPassword, String email) {
+
+        Account account = new Account();
+        account.setPhoneNum(dingTalkAccount);
+        account.setDingDingPassword(dingTalkPassword);
+        account.setAuthAccount(authAccount);
+        account.setAuthAccountPassword(authPassword);
+        account.setMail(email);
+
+        account.saveAccountInfo(account, this);
+        LogUtils.d("$$$ 账户信息已保存");
     }
 
     /**
@@ -99,7 +168,7 @@ public class MainActivity extends Activity {
      *
      * @param context
      */
-    public static boolean gotoAccessibilitySettings(Context context) {
+    private static boolean gotoAccessibilitySettings(Context context) {
         Intent settingsIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
         if (!(context instanceof Activity)) {
             settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -111,6 +180,12 @@ public class MainActivity extends Activity {
             isOk = false;
         }
         return isOk;
+    }
+
+    private void backToLoginActivity(Context context) {
+
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
     }
 
     private static boolean openSettings(Context context) {
@@ -126,5 +201,15 @@ public class MainActivity extends Activity {
             isOk = false;
         }
         return isOk;
+    }
+
+    @Override
+    public void onInfoEnough() {
+
+        SteppersItem item = steppersItems.get(1);
+        item.setPositiveButtonEnable(true);
+
+        InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
 }

@@ -3,4 +3,15 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="login_item_text_size">96sp</dimen>
+    <dimen name="item_circle_margin_text">12dp</dimen>
+    <dimen name="item_circle_text_size">12sp</dimen>
+    <dimen name="item_circle_width_height">24dp</dimen>
+    <dimen name="item_frame_margin_top_bottom">16dp</dimen>
+    <dimen name="item_line_first_height">14dp</dimen>
+    <dimen name="item_line_first_margin">8dp</dimen>
+    <dimen name="item_margin_bottom_active">48dp</dimen>
+    <dimen name="item_margin_bottom_inactive">40dp</dimen>
+    <dimen name="item_margin_left_right">24dp</dimen>
+    <dimen name="item_text_margin_left">12dp</dimen>
+    <dimen name="item_text_margin_top">24dp</dimen>
 </resources>

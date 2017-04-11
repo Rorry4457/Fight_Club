@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.auto.auto.Fragment.FirstFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:id="@+id/dingTalkAccount"
+        style="@style/EidtTextStyle"
+        android:hint="@string/phone_number"
+        android:inputType="phone"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/dingTalkPassword"
+        style="@style/EidtTextStyle"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/authAccount"
+        style="@style/EidtTextStyle"
+        android:hint="@string/authAccountEditText"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/authAccountPassword"
+        style="@style/EidtTextStyle"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/eMail"
+        style="@style/EidtTextStyle"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:maxLines="1" />
+
+</LinearLayout>

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/-punch_card-master.iml" filepath="$PROJECT_DIR$/-punch_card-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/fight/fight.iml" filepath="$PROJECT_DIR$/fight/fight.iml" />
+      <module fileurl="file://$PROJECT_DIR$/punch_card-master.iml" filepath="$PROJECT_DIR$/punch_card-master.iml" />
     </modules>
   </component>
 </project>
