@@ -4,39 +4,60 @@
     android:id="@+id/activity_result"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_green"
+    android:background="@color/dark_green"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.auto.auto.ResultActivity">
 
     <TextView
-        android:id="@+id/dingTalkAccount"
         style="@style/ResultTextViewStyle"
-        tools:text="12987312984" />
+        android:text="@string/current_account" />
 
-    <TextView
-        android:id="@+id/authAccount"
-        style="@style/ResultTextViewStyle"
-        tools:text="chendssd" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:paddingLeft="36dp">
 
-    <TextView
-        android:id="@+id/eMail"
-        style="@style/ResultTextViewStyle"
-        tools:text="/@icloud.com" />
+        <TextView
+            android:id="@+id/dingTalkAccount"
+            style="@style/ResultTextViewStyle"
+            tools:text="12987312984" />
+
+        <TextView
+            android:id="@+id/authAccount"
+            style="@style/ResultTextViewStyle"
+            tools:text="chendssd" />
+
+        <TextView
+            android:id="@+id/eMail"
+            style="@style/ResultTextViewStyle"
+            tools:text="/@icloud.com" />
+
+        <TextView
+            android:id="@+id/version"
+            style="@style/ResultTextViewStyle"
+            tools:text="22324" />
+    </LinearLayout>
 
 
-    <Button
-        android:id="@+id/openAccessibility"
-        style="@style/ResultButtonStyle"
-        android:text="@string/check_accessibility" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/revert"
-        style="@style/ResultButtonStyle"
-        android:text="@string/revert" />
+        <Button
+            android:id="@+id/openAccessibility"
+            style="@style/ResultButtonStyle"
+            android:text="@string/check_accessibility" />
+
+        <Button
+            android:id="@+id/reset"
+            style="@style/ResultButtonStyle"
+            android:text="@string/reset" />
+    </LinearLayout>
 
 
 </LinearLayout>

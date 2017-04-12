@@ -47,7 +47,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (password.equals("998877")) {
 
                     Account account = Account.getAccountInfo(LoginActivity.this);
-                    if (account.hasAlreadySavedLoginInfo()) {
+
+                    if (account !=null && account.hasAlreadySavedLoginInfo()) {
                         startResultActivity();
                     } else {
                         startMainActivity();
@@ -96,17 +97,5 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return itemList;
-    }
-
-    private String getVersion() {
-        try {
-            PackageManager manager = this.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-            System.out.println("info.versionName = " + info.versionName);
-            return info.versionName;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
     }
 }

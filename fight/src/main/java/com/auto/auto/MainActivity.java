@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.auto.auto.Fragment.FirstFragment;
 import com.auto.auto.Fragment.OneButtonFragment;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
             public void onFinish() {
                 Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -85,12 +87,8 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
                         backToLoginActivity(MainActivity.this);
                         finish();
                         break;
-                    case 1:
-                        SteppersItem item = steppersItems.get(position);
-                        item.setPositiveButtonEnable(true);
-                        // TODO: 2017/4/11 清除当前信息 回退到前一项
-                        break;
                     default:
+                        Toast.makeText(MainActivity.this,"Not finished yet",Toast.LENGTH_SHORT).show();
                         // TODO: 2017/4/11 回退一项
                         break;
                 }

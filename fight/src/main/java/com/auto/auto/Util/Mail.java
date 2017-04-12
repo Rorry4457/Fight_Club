@@ -18,10 +18,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-/**
- * Created by Rorry on 2017/3/10.
- */
-
 public class Mail extends javax.mail.Authenticator {
 
     private String _user;

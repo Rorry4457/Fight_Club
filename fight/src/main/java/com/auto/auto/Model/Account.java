@@ -14,6 +14,18 @@ import java.io.Serializable;
 
 public class Account implements Serializable {
 
+    @Override
+    public String toString() {
+
+        String account = "";
+        account += "account :" + phoneNum + "\n";
+        account += "dingDingPassword" + dingDingPassword + "\n";
+        account += "authAccount" + authAccount + "\n";
+        account += "authAccountPassword" + authAccountPassword + "\n";
+        account += "email" + mail + "\n";
+        return account;
+    }
+
     public String getPhoneNum() {
         return phoneNum;
     }
@@ -65,11 +77,16 @@ public class Account implements Serializable {
         account.saveAccountInfo(account, context);
     }
 
-    public void setCheckInToday(boolean checkInToday) {
+    public static void clearAccount(Context context) {
+        Account account = getAccountInfo(context);
+        account.saveAccountInfo(new Account(), context);
+    }
+
+    private void setCheckInToday(boolean checkInToday) {
         isCheckInToday = checkInToday;
     }
 
-    public boolean isCheckInToday() {
+    private boolean isCheckInToday() {
         return isCheckInToday;
     }
 
@@ -108,7 +125,7 @@ public class Account implements Serializable {
 
     private static Account getData(SharedPreferences sharedPreferences) {
 
-        Account account = null;
+        Account account = new Account();
         String productBase64 = sharedPreferences.getString(Constant.ACCOUNT, "");
 
         // 读取字节
@@ -128,6 +145,7 @@ public class Account implements Serializable {
         }
         return account;
     }
+
     private String phoneNum = "";
     private String dingDingPassword = "";
     private String authAccount = "";
