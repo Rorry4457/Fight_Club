@@ -27,37 +27,37 @@ public class LoginViewHolder extends RecyclerView.ViewHolder {
         this.item = item;
     }
 
-    public void loadItemInfo() {
+    public void loadItemInfo(int index) {
 
-        setText();
+        setText(index);
         modifyLeftTextViewPosition();
         modifyRightTextViewPosition();
-        setParentViewBackground();
+        setParentViewBackground(index);
 
     }
 
-    private void setParentViewBackground() {
+    private void setParentViewBackground(int index) {
 
-        if (item.isOdd()) {
+        if (index % 2 == 0) {
             itemView.setBackgroundColor(context.getResources().getColor(R.color.light_green));
         } else {
             itemView.setBackgroundColor(context.getResources().getColor(R.color.dark_green));
         }
     }
 
-    private void setText() {
+    private void setText(int index) {
 
         String leftText = item.getLeftText();
         leftTextView.setText(leftText);
-        setTextColor(leftTextView);
+        setTextColor(leftTextView, index);
 
         String rightText = item.getRightText();
         rightTextView.setText(rightText);
-        setTextColor(rightTextView);
+        setTextColor(rightTextView, index);
     }
 
-    private void setTextColor(TextView textView) {
-        if (item.isOdd()) {
+    private void setTextColor(TextView textView, int index) {
+        if (index % 2 == 0) {
             textView.setTextColor(context.getResources().getColor(R.color.light_red));
         } else {
             textView.setTextColor(context.getResources().getColor(R.color.dark_red));

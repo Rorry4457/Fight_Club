@@ -1,8 +1,6 @@
 package com.auto.auto;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -92,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                 rightString = name.substring(i, rightIndex);
             }
 
-            LoginItem item = new LoginItem(leftString, rightString, i);
+            LoginItem item = new LoginItem(leftString, rightString);
             itemList.add(item);
         }
 

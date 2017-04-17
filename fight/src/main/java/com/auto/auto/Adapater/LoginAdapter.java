@@ -33,7 +33,7 @@ public class LoginAdapter extends RecyclerView.Adapter<LoginViewHolder> {
         LoginItem item = itemList.get(position);
 
         holder.setLoginItem(item);
-        holder.loadItemInfo();
+        holder.loadItemInfo(position);
     }
 
     @Override
