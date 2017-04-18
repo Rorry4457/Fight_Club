@@ -22,7 +22,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +96,9 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
 
         if (position == currentStep || holder.isChecked())
             holder.roundedView.setCircleAccentColor();
-        else holder.roundedView.setCircleGrayColor();
+        else {
+            holder.roundedView.setCircleGrayColor();
+        }
 
         holder.textViewLabel.setText(steppersItem.getLabel());
         holder.textViewSubLabel.setText(steppersItem.getSubLabel());
@@ -144,13 +145,8 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
             });
 
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.frame_layout, holder.frameLayout, true);
-
         if (frameLayoutIds.get(position) == null)
             frameLayoutIds.put(position, findUnusedId(holder.itemView));
-
-        //frameLayout.setId(frameLayoutIds.get(position));
 
         if (config.getFragmentManager() != null && steppersItem.getFragment() != null) {
             holder.frameLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));

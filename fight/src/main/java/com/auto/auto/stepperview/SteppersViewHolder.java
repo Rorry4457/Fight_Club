@@ -36,7 +36,6 @@ public class SteppersViewHolder extends RecyclerView.ViewHolder {
     protected TextView textViewSubLabel;
     protected LinearLayout linearLayoutContent;
     protected FrameLayout frameLayout;
-    protected LinearLayout frameLayoutsContainer;
     protected Button buttonContinue;
     protected Button buttonCancel;
     protected Fragment fragment;
@@ -49,7 +48,6 @@ public class SteppersViewHolder extends RecyclerView.ViewHolder {
         this.textViewSubLabel = (TextView) itemView.findViewById(R.id.textViewSubLabel);
         this.linearLayoutContent = (LinearLayout) itemView.findViewById(R.id.linearLayoutContent);
         this.frameLayout = (FrameLayout) itemView.findViewById(R.id.frameLayout);
-        //this.frameLayoutsContainer = (LinearLayout) itemView.findViewById(R.id.frameLayoutsContainer);
         this.buttonContinue = (Button) itemView.findViewById(R.id.buttonContinue);
         this.buttonCancel = (Button) itemView.findViewById(R.id.buttonCancel);
     }
