@@ -1,44 +1,31 @@
 package com.auto.auto.Adapater;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.auto.auto.Model.LoginItem;
 import com.auto.auto.Model.LoginViewHolder;
 import com.auto.auto.R;
+import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class LoginAdapter extends RecyclerView.Adapter<LoginViewHolder> {
+public class LoginAdapter extends BaseItemDraggableAdapter<LoginItem, LoginViewHolder> {
 
-    private List<LoginItem> itemList = new ArrayList<>();
-
-    public LoginAdapter(List<LoginItem> itemList) {
-        this.itemList = itemList;
+    public LoginAdapter(List<LoginItem> data) {
+        super(R.layout.login_item, data);
     }
 
     @Override
-    public LoginViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.login_item, parent, false);
-        return new LoginViewHolder(view, parent.getContext());
+    public void onItemSwiped(RecyclerView.ViewHolder viewHolder) {
+        super.onItemSwiped(viewHolder);
     }
 
     @Override
-    public void onBindViewHolder(LoginViewHolder holder, int position) {
+    protected void convert(LoginViewHolder loginViewHolder, LoginItem loginItem) {
 
-        LoginItem item = itemList.get(position);
+        int position = loginViewHolder.getAdapterPosition();
 
-        holder.setLoginItem(item);
-        holder.loadItemInfo(position);
+        loginViewHolder.setLoginItem(loginItem);
+        loginViewHolder.loadItemInfo(position,mContext);
     }
-
-    @Override
-    public int getItemCount() {
-        return itemList.size();
-    }
-
 }

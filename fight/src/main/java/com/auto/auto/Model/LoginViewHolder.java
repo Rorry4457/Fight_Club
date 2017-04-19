@@ -8,35 +8,38 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.auto.auto.R;
+import com.chad.library.adapter.base.BaseViewHolder;
 
-public class LoginViewHolder extends RecyclerView.ViewHolder {
+public class LoginViewHolder extends BaseViewHolder {
     private TextView leftTextView;
     private TextView rightTextView;
-    private LoginItem item;
-    private Context context;
 
-    public LoginViewHolder(View itemView, Context context) {
+    private LoginItem item;
+
+    public LoginViewHolder(View itemView) {
         super(itemView);
 
-        leftTextView = (TextView) itemView.findViewById(R.id.left_text_view);
-        rightTextView = (TextView) itemView.findViewById(R.id.right_text_view);
-        this.context = context;
+        leftTextView = getView(R.id.left_text_view);
+        rightTextView = getView(R.id.right_text_view);
     }
 
     public void setLoginItem(LoginItem item) {
         this.item = item;
     }
 
-    public void loadItemInfo(int index) {
-
-        setText(index);
-        modifyLeftTextViewPosition();
-        modifyRightTextViewPosition();
-        setParentViewBackground(index);
-
+    public LoginItem getItem() {
+        return item;
     }
 
-    private void setParentViewBackground(int index) {
+    public void loadItemInfo(int index, Context context) {
+
+        setText(index, context);
+        modifyLeftTextViewPosition();
+        modifyRightTextViewPosition();
+        setViewHolderBackground(index,context);
+    }
+
+    private void setViewHolderBackground(int index, Context context) {
 
         if (index % 2 == 0) {
             itemView.setBackgroundColor(context.getResources().getColor(R.color.light_green));
@@ -45,18 +48,18 @@ public class LoginViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void setText(int index) {
+    private void setText(int index, Context context) {
 
         String leftText = item.getLeftText();
         leftTextView.setText(leftText);
-        setTextColor(leftTextView, index);
+        setTextColor(leftTextView, index, context);
 
         String rightText = item.getRightText();
         rightTextView.setText(rightText);
-        setTextColor(rightTextView, index);
+        setTextColor(rightTextView, index, context);
     }
 
-    private void setTextColor(TextView textView, int index) {
+    private void setTextColor(TextView textView, int index, Context context) {
         if (index % 2 == 0) {
             textView.setTextColor(context.getResources().getColor(R.color.light_red));
         } else {

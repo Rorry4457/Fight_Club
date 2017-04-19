@@ -29,5 +29,14 @@
         tools:text="C"
         tools:textColor="@color/light_red" />
 
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:scaleType="center"
+        android:src="@mipmap/drag_icon" />
+
 
 </RelativeLayout>

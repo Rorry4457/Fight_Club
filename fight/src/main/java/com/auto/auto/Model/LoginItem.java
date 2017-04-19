@@ -2,11 +2,11 @@ package com.auto.auto.Model;
 
 public class LoginItem {
 
-    String getLeftText() {
+    public String getLeftText() {
         return leftText;
     }
 
-    String getRightText() {
+    public String getRightText() {
         return rightText;
     }
 
