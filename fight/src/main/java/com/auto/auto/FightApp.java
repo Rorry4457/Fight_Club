@@ -40,5 +40,6 @@ public class FightApp extends Application {
                 .build();
         printers[1] = filePrinter;
         LogUtils.init(config,printers);
+        LogUtils.setDebug(BuildConfig.DEBUG);
     }
 }
