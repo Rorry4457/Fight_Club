@@ -15,3 +15,18 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class com.chad.library.adapter.** {
+   *;
+}
+
+-keep class com.auto.auto.Model.**{*;}
+
+-dontwarn com.sun.**
+-keep class com.sun.**{*;}
+
+-dontwarn org.apache.**
+-keep class org.apache.**{*;}
+
+-keep class javax.** {*;}
+-dontwarn javax.activation.**
