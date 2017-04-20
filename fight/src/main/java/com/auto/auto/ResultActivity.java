@@ -23,13 +23,13 @@ public class ResultActivity extends AppCompatActivity {
         Account account = Account.getAccountInfo(this);
 
         TextView dingTalkAccount = (TextView) findViewById(R.id.dingTalkAccount);
-        dingTalkAccount.setText(decoratePhoneNum(account.getPhoneNum()));
+        dingTalkAccount.setText(account.getPhoneNum());
 
         TextView authAccount = (TextView) findViewById(R.id.authAccount);
-        authAccount.setText(decorateAccout(account.getAuthAccount()));
+        authAccount.setText(account.getAuthAccount());
 
         TextView email = (TextView) findViewById(R.id.eMail);
-        email.setText(decorateEmail(account.getMail()));
+        email.setText(account.getMail());
 
         TextView versionNum = (TextView) findViewById(R.id.version);
         versionNum.setText(getVersion());
