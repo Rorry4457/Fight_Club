@@ -15,6 +15,8 @@ public class CheckListener implements AlarmClock.TimeoutListener {
             case Constant.CHECK_OUT:
                 Operation.startCheckOutOperation(context);
                 break;
+            case Constant.CHECK_WIFI:
+                Operation.turnOnWifi(context);
             default:
                 break;
         }

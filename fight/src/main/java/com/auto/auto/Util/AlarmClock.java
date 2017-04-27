@@ -20,7 +20,7 @@ public class AlarmClock {
 
     private static AlarmClock instance;
     private AlarmManager alarmManager;
-//    private PendingIntent sendIntent;
+    //    private PendingIntent sendIntent;
 //    private TimeoutListener timeoutListener;
     private TimeoutListener timeoutAtTimeListener;
 
@@ -107,12 +107,25 @@ public class AlarmClock {
         startAtTime(context, timeStamp, timeoutListener, SendReceiver.ACTION_CHECK_IN, Constant.CHECK_IN);
     }
 
+    public void delayOpenWifi(Context context, int minSec, int maxSec, TimeoutListener timeoutListener) {
+
+        int randSec = getRandomSecond(minSec, maxSec);
+        LogUtils.d("$$$ 延时 ： " + randSec + "secs");
+
+        long timeStamp = System.currentTimeMillis();
+        timeStamp += randSec * 1000;
+
+        LogUtils.d("$$$ 预计在 " + predictCheckInTime(timeStamp) + " 打开Wi-Fi");
+
+        startAtTime(context, timeStamp, timeoutListener, SendReceiver.ACTION_CHECK_WIFI, Constant.CHECK_WIFI);
+    }
+
     public void wakeUpCheckOut(Context context, TimeoutListener timeoutListener) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, Constant.HOUR_OF_CHECK_OUT);
         calendar.set(Calendar.MINUTE, Constant.MINUTE_OF_CHECK_OUT);
-        calendar.set(Calendar.SECOND,Constant.SECOND_OF_CHECK_OUT);
+        calendar.set(Calendar.SECOND, Constant.SECOND_OF_CHECK_OUT);
         long timeStamp = calendar.getTimeInMillis();
 
         LogUtils.d("$$$ 将在 " + predictCheckInTime(timeStamp) + " 提醒下班");
@@ -151,6 +164,7 @@ public class AlarmClock {
     public static class SendReceiver extends BroadcastReceiver {
         public final static String ACTION_CHECK_OUT = "com.fight.club.check.out";
         public final static String ACTION_CHECK_IN = "com.fight.club.check.in";
+        public final static String ACTION_CHECK_WIFI = "com.fight.club.check.wifi";
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -161,6 +175,8 @@ public class AlarmClock {
                     instance.timeoutAtTime(context, intent, Constant.CHECK_OUT);
                 } else if (ACTION_CHECK_IN.equals(action)) {
                     instance.timeoutAtTime(context, intent, Constant.CHECK_IN);
+                } else if (ACTION_CHECK_WIFI.equals(action)) {
+                    instance.timeoutAtTime(context, intent, Constant.CHECK_WIFI);
                 }
             }
         }

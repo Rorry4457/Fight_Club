@@ -44,8 +44,8 @@ public class Constant {
     public static final int SECOND_OF_CHECK_OUT = 5;
     //RequestCode
     public static final int CHECK_IN = 1001;
-
     public static final int CHECK_OUT = 1002;
+    public static final int CHECK_WIFI = 1003;
     //
     public static final String SUCCESS = "上班极速打卡成功";
     public static final String DEPARTMENT = "工作通知:新大陆支付-云端支付-系统研发部";//部门标题

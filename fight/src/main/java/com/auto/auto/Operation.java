@@ -92,10 +92,28 @@ public class Operation {
         wl.release();
     }
 
-    public static boolean turnOnWifiWhenOff(Context context) {
+    public static boolean turnOnWifi(Context context) {
+
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         return wifiManager.isWifiEnabled() || wifiManager.setWifiEnabled(true);
+    }
+
+    public static boolean turnOffWifi(Context context) {
+
+        LogUtils.d("$$$ 关闭Wi-Fi");
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+        return wifiManager.setWifiEnabled(false);
+    }
+
+    public static void authInAndSendEmail(final Context context) {
+        authIn(context, new Runnable() {
+            @Override
+            public void run() {
+                sendSuccessEmail(context);
+            }
+        });
     }
 
     public static boolean openAccessibilitySetting(Context context) {
@@ -170,8 +188,11 @@ public class Operation {
                 String strResult = HttpUtil.submitPostData(Constant.AUTH_ADDREDD, params, "utf-8");
 
                 LogUtils.d("$$$ strResult = " + strResult);
-                Handler uiHandler = new Handler(Looper.getMainLooper());
-                uiHandler.post(uiRunnable);
+
+                if (uiRunnable != null) {
+                    Handler uiHandler = new Handler(Looper.getMainLooper());
+                    uiHandler.post(uiRunnable);
+                }
             }
         }).start();
     }
