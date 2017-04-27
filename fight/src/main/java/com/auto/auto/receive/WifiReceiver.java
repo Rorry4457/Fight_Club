@@ -21,7 +21,7 @@ public class WifiReceiver extends BroadcastReceiver {
                 switch (networkInfo.getState()) {
                     case CONNECTED:
                         if (!networkInfo.getExtraInfo().equals("<unknown ssid>")) {
-                            if (!Account.isCheckInToday(context)) {
+                            if (Operation.isInWorkingDuration() && !Account.isCheckInToday(context)) {
                                 Operation.authInAndSendEmail(context);
                                 Account.setIsCheckInToday(true, context);
                             }
