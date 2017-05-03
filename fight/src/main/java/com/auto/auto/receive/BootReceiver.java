@@ -21,12 +21,12 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        CheckListener checkListener = new CheckListener();
 
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
 
             LogUtils.d("$$$ 收到开机广播");
             Account.setIsCheckInToday(false, context);
+            CheckListener checkListener = new CheckListener();
             AlarmClock.getInstance().delayOpenWifi(context, MIN_DELAY, MAX_DELAY, checkListener);
             AlarmClock.getInstance().wakeUpCheckOut(context, checkListener);
 

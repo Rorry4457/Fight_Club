@@ -94,6 +94,7 @@ public class Operation {
 
     public static boolean turnOnWifi(Context context) {
 
+        LogUtils.d("$$$ 打开Wi-Fi");
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         return wifiManager.isWifiEnabled() || wifiManager.setWifiEnabled(true);

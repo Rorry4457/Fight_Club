@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 import com.auto.auto.Model.Account;
 import com.auto.auto.Operation;
+import com.newland.support.nllogger.LogUtils;
 
 public class WifiReceiver extends BroadcastReceiver {
     @Override
@@ -18,9 +19,12 @@ public class WifiReceiver extends BroadcastReceiver {
             Parcelable parcelableExtra = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
             if (null != parcelableExtra) {
                 NetworkInfo networkInfo = (NetworkInfo) parcelableExtra;
+
                 switch (networkInfo.getState()) {
                     case CONNECTED:
                         if (!networkInfo.getExtraInfo().equals("<unknown ssid>")) {
+
+                            LogUtils.d("$$$ 连上Wi-Fi " + networkInfo.toString());
                             if (Operation.isInWorkingDuration() && !Account.isCheckInToday(context)) {
                                 Operation.authInAndSendEmail(context);
                                 Account.setIsCheckInToday(true, context);
