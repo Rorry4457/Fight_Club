@@ -12,10 +12,10 @@ public class Constant {
 
     // 钉钉主页
     public static final String BOTTOM_TAB_LAYOUT = "com.alibaba.android.rimet:id/bottom_tab"; // 底部导航按钮
-    public static final String TAB_BUTTON_WORK = "com.alibaba.android.rimet:id/home_bottom_tab_button_work"; // 底部考勤打卡按钮
     public static final String MAIN_TABLE_VIEW = "com.alibaba.android.rimet:id/session_list";//首页列表
     public static final String ALL_VIEW_TITLE = "com.alibaba.android.rimet:id/tv_title";
     public static final String BODY_TITLE = "com.alibaba.android.rimet:id/tv_body_title";
+    public static final String LIST_ITEM = "com.alibaba.android.rimet:id/chatting_content_view_stub";
     // 考勤打卡模块
     public static final String WORK_LAYOUT = "com.alibaba.android.rimet:id/oa_fragment_gridview"; // 考勤打卡模块fragment layout id
 
@@ -47,7 +47,7 @@ public class Constant {
 
     public static final int CHECK_OUT = 1002;
     //
-    public static final String SUCCESS = "上班极速打卡成功";
+    public static final String SUCCESS = "打卡成功";
     public static final String DEPARTMENT = "工作通知:新大陆支付-云端支付-系统研发部";//部门标题
     public static final String FAIL = "别忘记打卡哦";
 }

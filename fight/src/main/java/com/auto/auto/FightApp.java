@@ -23,23 +23,30 @@ public class FightApp extends Application {
                 .build();
         Printer[] printers = new Printer[2];
         printers[0] = new AndroidPrinter();
-        String filePath = new File(Environment.getExternalStorageDirectory(),"loggers").getPath();
 
         final DateFormat format = DateFormat.getDateTimeInstance();
 
-        FilePrinter filePrinter = new FilePrinter.Builder(filePath)
+        FilePrinter filePrinter = new FilePrinter.Builder(FightApp.getLogPath())
                 .logFlattener(new Flattener() {
                     @Override
                     public CharSequence flatten(int logLevel, String tag, String message) {
                         return format.format(new Date())
-                                + '|' + LogLevel.getShortLevelName(logLevel)
                                 + '|' + tag
                                 + '|' + message;
                     }
                 })
                 .build();
+
         printers[1] = filePrinter;
         LogUtils.init(config,printers);
         LogUtils.setDebug(BuildConfig.DEBUG);
+    }
+
+    public static String getLogPath() {
+        return new File(Environment.getExternalStorageDirectory(), "loggers").getPath();
+    }
+
+    public static File getLogFile() {
+        return new File(Environment.getExternalStorageDirectory(), "loggers");
     }
 }

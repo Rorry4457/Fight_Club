@@ -81,6 +81,27 @@ public class Operation {
         return now.after(minLimit) && now.before(maxLimit);
     }
 
+    public static boolean isInCheckOutDuration() {
+
+        Long currentTime = System.currentTimeMillis();
+
+        Time now = new Time(currentTime);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 45);
+        calendar.set(Calendar.SECOND, 0);
+        Time minLimit = new Time(calendar.getTimeInMillis());
+
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 45);
+        calendar.set(Calendar.SECOND, 30);
+        Time maxLimit = new Time(calendar.getTimeInMillis());
+
+        return now.after(minLimit) && now.before(maxLimit);
+    }
+
     private static void lightUpScreen(Context context) {
         //获取电源管理器对象
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);

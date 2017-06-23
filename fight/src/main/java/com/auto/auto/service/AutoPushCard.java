@@ -5,8 +5,6 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -21,113 +19,51 @@ import java.util.List;
 public class AutoPushCard extends AccessibilityService {
 
     boolean isLoginOperate = false;
-    boolean isSetSchedul = false;
+    boolean isAlreadyOpenCheckOut = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
 
-        if (!Operation.isInWorkingDuration()) {
-            return;
-        }
-
         int eventType = accessibilityEvent.getEventType();
         String packageName = accessibilityEvent.getPackageName().toString();
+        if (Operation.isInWorkingDuration()) {
 
-        if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
-            autoLogin();
-            closeWebAlert();
-        } else if (eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
-            openWorkNotificationPage();
-            //界面的切换回多次调用，在这里进行是否打卡成功的检测，比较妥当
-            isAlreadyCheckIn();
-        } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.SETTING.equals(packageName)) {
-//            System.out.println("packageName = " + packageName);
-//            openScheduleSetting();
+            if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
+                autoLogin();
+                closeWebAlert();
+            } else if (eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
+                openWorkNotificationPage();
+                //界面的切换会多次调用，在这里进行是否打卡成功的检测，比较妥当
+                isAlreadyCheckIn();
+            }
         }
-    }
 
-    // TODO: 2017/2/22 逻辑要修正 待下一期需求
-    private void openScheduleSetting() {
-        if (!isSetSchedul) {
-            AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
-            if (rootInActiveWindow.getChild(1).getChildCount() > 0) {
-                AccessibilityNodeInfo scheduled = rootInActiveWindow.getChild(1).getChild(13);
-                scheduled.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                isSetSchedul = true;
-            } else {
-                LogUtils.d("$$$ 未找到设置定时开关机");
+        if (Operation.isInCheckOutDuration()) {
+
+            if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
+                openPageForCheckOut();
             }
         }
     }
 
-    //此方法经验证可行，但不是最优方案，切换到另一方案，暂不删除
-    private void openCheckInPage() {
-        if (Account.isCheckInToday(this)) {
-            return;
-        }
-
-        if (findNodeById(Constant.BOTTOM_TAB_LAYOUT).size() > 0) {
-            LogUtils.d("$$$ 滑动tabBar到 工作 ");
-            AccessibilityNodeInfo layoutWork = findNodeById(Constant.TAB_BUTTON_WORK).get(0);
-            layoutWork.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-        }
-
-        if (findNodeById(Constant.WORK_LAYOUT).size() > 0) {
-            List<AccessibilityNodeInfo> itemList = findNodeById(Constant.WORK_LAYOUT_ITEM);
-
-            // 找出考勤打卡的模块
-            for (AccessibilityNodeInfo info : itemList) {
-                AccessibilityNodeInfo child = info.getChild(info.getChildCount() - 1);
-                if (child.getClassName().equals("android.widget.TextView") && child.getText().equals("考勤打卡")) {
-                    LogUtils.d("$$$ 找到了 考勤打卡的 item  点击进入打卡页面");
-                    info.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    Account.setIsCheckInToday(true, this);
-
-                    waitAndCheck(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isCheckFinished()) {
-                                Operation.sendSuccessEmail(AutoPushCard.this);
-                            }
-                        }
-                    });
-                    return;
+    private void openPageForCheckOut() {
+        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
+        if (bottomTab.size() > 0) {
+            List<AccessibilityNodeInfo> tableLayout = findNodeById(Constant.MAIN_TABLE_VIEW);
+            if (tableLayout.size() > 0) {
+                List<AccessibilityNodeInfo> items = tableLayout.get(0).findAccessibilityNodeInfosByText(Constant.DEPARTMENT);
+                if (items.size() > 0) {
+                    items.get(0).getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 }
             }
         }
-    }
 
-    private void waitAndCheck(final Runnable runnable) {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    LogUtils.d("$$$ 开始等待页面加载");
-                    Thread.sleep(10000);
-                    Handler uiHandler = new Handler(Looper.getMainLooper());
-                    uiHandler.post(runnable);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    private boolean isCheckFinished() {
-        LogUtils.d("$$$ 开始检测是否已经打卡");
-        try {
-            String description = findNodeById(Constant.WEB_VIEW).get(0).getChild(0).getChild(0).getChild(0).getChild(4).getChild(1).getChild(3).getChild(0).getContentDescription().toString();
-            if (description.equals("正常")) {
-                LogUtils.d("$$$ 检测到已经打卡");
-                return true;
-            }
-        } catch (Exception e) {
-            LogUtils.e(e);
+        List<AccessibilityNodeInfo> items = findNodeById(Constant.LIST_ITEM);
+        if (items.size() > 0 && !isAlreadyOpenCheckOut) {
+            isAlreadyOpenCheckOut = true;
+            items.get(items.size() - 1).performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
-
-        return false;
     }
 
     private void openWorkNotificationPage() {
@@ -223,8 +159,8 @@ public class AutoPushCard extends AccessibilityService {
             LogUtils.d("$$$ 发现web Alert 执行关闭操作");
             AccessibilityNodeInfo button = closeBtn.get(0);
             button.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-        }else {
-           LogUtils.d("$$$ 未发现web Alert");
+        } else {
+            LogUtils.d("$$$ 未发现web Alert");
         }
     }
 
