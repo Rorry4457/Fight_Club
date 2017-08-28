@@ -318,10 +318,7 @@ public class Operation {
     private static boolean haveRoot() {
 
         int i = execRootCmdSilent("echo test"); // 通过执行测试命令来检测
-        if (i != -1) {
-            return true;
-        }
-        return false;
+        return i != -1;
     }
 
     private static int execRootCmdSilent(String paramString) {
@@ -338,7 +335,7 @@ public class Operation {
             localDataOutputStream.flush();
             localProcess.waitFor();
             int result = localProcess.exitValue();
-            return (Integer) result;
+            return result;
         } catch (Exception localException) {
             localException.printStackTrace();
             return -1;

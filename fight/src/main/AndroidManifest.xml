@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".ResultActivity"></activity>
+        <activity android:name=".ResultActivity" />
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package com.auto.auto.Model;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextPaint;
 import android.view.View;
 import android.widget.RelativeLayout;

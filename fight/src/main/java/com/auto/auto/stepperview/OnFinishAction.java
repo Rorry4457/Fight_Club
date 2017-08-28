@@ -18,6 +18,6 @@ package com.auto.auto.stepperview;
 
 public interface OnFinishAction {
 
-    public void onFinish();
+    void onFinish();
 
 }

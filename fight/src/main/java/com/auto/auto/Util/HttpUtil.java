@@ -46,7 +46,7 @@ public class HttpUtil {
             }
         } catch (IOException e) {
             //e.printStackTrace();
-            return "err: " + e.getMessage().toString();
+            return "err: " + e.getMessage();
         }
         return "-1";
     }

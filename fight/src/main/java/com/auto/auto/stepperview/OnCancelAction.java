@@ -18,6 +18,6 @@ package com.auto.auto.stepperview;
 
 public interface OnCancelAction {
 
-    public void onCancel(int position);
+    void onCancel(int position);
 
 }

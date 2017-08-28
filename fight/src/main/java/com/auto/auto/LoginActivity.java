@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.auto.auto.Adapater.LoginAdapter;
 import com.auto.auto.Model.Account;
@@ -18,7 +15,6 @@ import com.auto.auto.Model.LoginItem;
 import com.auto.auto.Model.LoginViewHolder;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
-import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 
 import java.util.ArrayList;

@@ -4,7 +4,6 @@ import android.app.Application;
 import android.os.Environment;
 
 import com.elvishew.xlog.LogConfiguration;
-import com.elvishew.xlog.LogLevel;
 import com.elvishew.xlog.flattener.Flattener;
 import com.elvishew.xlog.printer.AndroidPrinter;
 import com.elvishew.xlog.printer.Printer;
