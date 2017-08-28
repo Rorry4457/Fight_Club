@@ -42,27 +42,44 @@ public class AutoPushCard extends AccessibilityService {
         if (Operation.isInCheckOutDuration()) {
 
             if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
-                openPageForCheckOut();
+                startCheckOut();
             }
         }
     }
 
-    private void openPageForCheckOut() {
-        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
-        if (bottomTab.size() > 0) {
-            List<AccessibilityNodeInfo> tableLayout = findNodeById(Constant.MAIN_TABLE_VIEW);
-            if (tableLayout.size() > 0) {
-                List<AccessibilityNodeInfo> items = tableLayout.get(0).findAccessibilityNodeInfosByText(Constant.DEPARTMENT);
-                if (items.size() > 0) {
-                    items.get(0).getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                }
-            }
+    private void startCheckOut() {
+        if (isAlreadyOpenCheckOut) {
+            return;
         }
 
-        List<AccessibilityNodeInfo> items = findNodeById(Constant.LIST_ITEM);
-        if (items.size() > 0 && !isAlreadyOpenCheckOut) {
-            isAlreadyOpenCheckOut = true;
-            items.get(items.size() - 1).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
+        if (bottomTab.size() > 0) {
+            List<AccessibilityNodeInfo> toWorkPageButton = bottomTab.get(0).findAccessibilityNodeInfosByViewId(Constant.TAB_FOR_WORK);
+            if (toWorkPageButton.size() > 0) {
+                toWorkPageButton.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                openCheckOutPage();
+            }
+        }
+    }
+
+    private void openCheckOutPage() {
+        List<AccessibilityNodeInfo> workLayouts = findNodeById(Constant.WORK_LAYOUT);
+
+        if (workLayouts.size() > 0) {
+
+            List<AccessibilityNodeInfo> items = workLayouts.get(0).findAccessibilityNodeInfosByViewId(Constant.WORK_LAYOUT_ITEM);
+            if (items.size() > 0) {
+
+                for (AccessibilityNodeInfo info : items) {
+
+                    List<AccessibilityNodeInfo> titleItems = info.findAccessibilityNodeInfosByViewId(Constant.WORK_ITEM_TITLE);
+                    if (titleItems.size() > 0 && titleItems.get(0).getText().equals(Constant.WORK_CHECK_TEXT)) {
+                        isAlreadyOpenCheckOut = true;
+                        info.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        return;
+                    }
+                }
+            }
         }
     }
 
