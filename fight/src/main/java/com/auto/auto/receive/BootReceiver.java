@@ -22,7 +22,7 @@ public class BootReceiver extends BroadcastReceiver {
         LogUtils.d("$$$ 收到开机广播");
         Account.setIsCheckInToday(false, context);
 
-        Operation.turnOnWifiWhenOff(context);
+        Operation.turnOnWifi(context);
 
         CheckListener checkListener = new CheckListener();
 
