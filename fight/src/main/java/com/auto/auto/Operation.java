@@ -47,7 +47,7 @@ public class Operation {
         openDingDing(context);
     }
 
-    static void startCheckInOperation(final Context context) {
+    public static void startCheckInOperation(final Context context) {
 
         LogUtils.d("$$$ 上班打卡");
         lightUpScreen(context);
@@ -60,7 +60,7 @@ public class Operation {
         });
     }
 
-    public static boolean isInWorkingDuration() {
+    public static boolean isInCheckInDuration() {
 
         Long currentTime = System.currentTimeMillis();
 
@@ -100,6 +100,22 @@ public class Operation {
         Time maxLimit = new Time(calendar.getTimeInMillis());
 
         return now.after(minLimit) && now.before(maxLimit);
+    }
+
+    public static boolean isAfterWorkingTime() {
+
+        Long currentTime = System.currentTimeMillis();
+
+        Time now = new Time(currentTime);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 45);
+        calendar.set(Calendar.SECOND, 0);
+        Time minLimit = new Time(calendar.getTimeInMillis());
+
+        return now.after(minLimit) ;
     }
 
     private static void lightUpScreen(Context context) {

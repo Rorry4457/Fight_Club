@@ -39,32 +39,6 @@ public class AlarmClock {
     private AlarmClock() {
     }
 
-//    /**
-//     * 执行轮询闹钟定时器
-//     *
-//     * @param delayTime  首次执行的间隔时间(s)，0：立即执行
-//     * @param periodTime 间隔时间(s)
-//     */
-//    public void start(Context context, int delayTime, int periodTime, TimeoutListener timeoutListener) {
-//        this.timeoutListener = timeoutListener;
-//
-//        if (alarmManager == null) {
-//            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        }
-//        if (sendIntent != null) {
-//            alarmManager.cancel(sendIntent);
-//        }
-//        long intervalMillis = periodTime * 1000;
-//        Intent intent = new Intent(context, SendReceiver.class);
-//        intent.setAction(SendReceiver.ACTION_CHECK_OUT);
-//
-//        long triggerAtMillis = SystemClock.elapsedRealtime() + (delayTime * 1000);
-//
-//        sendIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        LogUtils.d("定时器设置完成，间隔时间(秒)：" + periodTime);
-//        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, intervalMillis, sendIntent);
-//    }
-
     /**
      * 执行指定时间点闹钟定时器
      *
@@ -96,7 +70,7 @@ public class AlarmClock {
      */
     public void delayCheckIn(Context context, int minSec, int maxSec, TimeoutListener timeoutListener) {
 
-        int randSec = getRandomSecond(minSec, maxSec);
+        int randSec = getRandomMinute(minSec, maxSec);
         LogUtils.d("$$$ 延时 ： " + randSec + "secs");
 
         long timeStamp = System.currentTimeMillis();
@@ -109,7 +83,7 @@ public class AlarmClock {
 
     public void delayOpenWifi(Context context, int minSec, int maxSec, TimeoutListener timeoutListener) {
 
-        int randSec = getRandomSecond(minSec, maxSec);
+        int randSec = getRandomMinute(minSec, maxSec);
         LogUtils.d("$$$ 延时 ： " + randSec + "secs");
 
         long timeStamp = System.currentTimeMillis();
@@ -141,8 +115,8 @@ public class AlarmClock {
         return format.format(predict);
     }
 
-    private static int getRandomSecond(int minSeconds, int maxSeconds) {
-        return (int) (Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;
+    private int getRandomMinute(int minMinutes, int maxMinutes) {
+        return (int) ((Math.random() * (maxMinutes - minMinutes + 1)) + minMinutes) * 60;
     }
 
     private void timeoutAtTime(Context context, Intent intent, int requestCode) {

@@ -38,12 +38,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".Util.AlarmClock$SendReceiver">
             <intent-filter>
                 <action android:name="com.fight.club.check.in" />
                 <action android:name="com.fight.club.check.out" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".receive.WifiReceiver">
             <intent-filter>
                 <action android:name="android.net.wifi.STATE_CHANGE" />

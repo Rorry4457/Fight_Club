@@ -25,10 +25,7 @@ public class WifiReceiver extends BroadcastReceiver {
                         if (!networkInfo.getExtraInfo().equals("<unknown ssid>")) {
 
                             LogUtils.d("$$$ 连上Wi-Fi " + networkInfo.toString());
-                            if (Operation.isInWorkingDuration() && !Account.isCheckInToday(context)) {
-                                Operation.authInAndSendEmail(context);
-                                Account.setIsCheckInToday(true, context);
-                            }
+                            Operation.startCheckInOperation(context);
                         }
                         break;
                     case CONNECTING:

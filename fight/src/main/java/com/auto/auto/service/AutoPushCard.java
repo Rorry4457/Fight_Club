@@ -27,7 +27,7 @@ public class AutoPushCard extends AccessibilityService {
 
         int eventType = accessibilityEvent.getEventType();
         String packageName = accessibilityEvent.getPackageName().toString();
-        if (Operation.isInWorkingDuration()) {
+        if (Operation.isInCheckInDuration()) {
 
             if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
                 autoLogin();
@@ -88,8 +88,8 @@ public class AutoPushCard extends AccessibilityService {
             return;
         }
 
-        List<AccessibilityNodeInfo> bottmeTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
-        if (bottmeTab.size() > 0) {
+        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
+        if (bottomTab.size() > 0) {
             List<AccessibilityNodeInfo> tableLayout = findNodeById(Constant.MAIN_TABLE_VIEW);
             if (tableLayout.size() > 0) {
                 List<AccessibilityNodeInfo> items = tableLayout.get(0).findAccessibilityNodeInfosByText(Constant.DEPARTMENT);

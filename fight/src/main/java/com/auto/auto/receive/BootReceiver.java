@@ -11,26 +11,33 @@ import com.auto.auto.Util.AlarmClock;
 import com.newland.support.nllogger.LogUtils;
 
 public class BootReceiver extends BroadcastReceiver {
-    private static int MAX_DELAY = 6 * 60;
-    private static int MIN_DELAY = 3 * 60;
+    private static int MAX_DELAY = 6;
+    private static int MIN_DELAY = 3;
 
 //    private static int MIN_DELAY = 5;
 //    private static int MAX_DELAY = 10;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogUtils.d("$$$ 收到开机广播");
-        Account.setIsCheckInToday(false, context);
+        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+            LogUtils.d("$$$ 收到开机广播");
+            Account.setIsCheckInToday(false, context);
 
-        Operation.turnOnWifi(context);
+            CheckListener checkListener = new CheckListener();
 
-        CheckListener checkListener = new CheckListener();
+            //仅在打卡时间内开机才会进行「延时上班打卡」
+            if (Operation.isInCheckInDuration()) {
+                AlarmClock.getInstance().delayOpenWifi(context, MIN_DELAY, MAX_DELAY, checkListener);
+            }
 
-        //仅在打卡时间内开机才会进行「延时上班打卡」防止出现迟到后开机自动打卡钉钉 打迟到卡的情况
-        if (Operation.isInWorkingDuration()) {
-            AlarmClock.getInstance().delayCheckIn(context, MIN_DELAY, MAX_DELAY, checkListener);
+            AlarmClock.getInstance().wakeUpCheckOut(context, checkListener);
+        } else if (intent.getAction().equals(Intent.ACTION_SHUTDOWN)) {
+            LogUtils.d("$$$ 收到关机广播");
+
+            //仅在下班后关系会关闭wifi，避免工作是重启设备导致wifi。
+            if (Operation.isAfterWorkingTime()) {
+                Operation.turnOffWifi(context);
+            }
         }
-
-        AlarmClock.getInstance().wakeUpCheckOut(context, checkListener);
     }
 }
