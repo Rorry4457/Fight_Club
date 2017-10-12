@@ -33,7 +33,6 @@ public class AutoPushCard extends AccessibilityService {
                 autoLogin();
                 closeWebAlert();
             } else if (eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
-                openWorkNotificationPage();
                 //界面的切换会多次调用，在这里进行是否打卡成功的检测，比较妥当
                 isAlreadyCheckIn();
             }
@@ -107,40 +106,77 @@ public class AutoPushCard extends AccessibilityService {
             return;
         }
 
-        List<AccessibilityNodeInfo> titleView = findNodeById(Constant.ALL_VIEW_TITLE);
-        if (titleView.size() > 0) {
-            String title = titleView.get(0).getText().toString();
+        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
+        if (bottomTab.size() > 0) {
+            List<AccessibilityNodeInfo> tableLayout = findNodeById(Constant.MAIN_TABLE_VIEW);
+            if (tableLayout.size() > 0) {
+                List<AccessibilityNodeInfo> items = tableLayout.get(0).findAccessibilityNodeInfosByText(Constant.DEPARTMENT);
+                if (items.size() > 0) {
 
-            if (title.equals(Constant.DEPARTMENT)) {
-                LogUtils.d("$$$ 打开工作通知页，开始检测是否打卡成功");
-                List<AccessibilityNodeInfo> listView = findNodeById(Constant.BODY_TITLE);
-                int size = listView.size();
-                if (size > 0) {
-                    AccessibilityNodeInfo info = listView.get(size - 1);
-                    String checkInfo = info.getText().toString();
-                    LogUtils.d("$$$ 获取到的打卡情况信息为： " + checkInfo);
+                    List<AccessibilityNodeInfo> titles = items.get(0).getParent().findAccessibilityNodeInfosByViewId(Constant.TABLE_ITEM_TEXT_VIEW);
+                    if (titles.size() > 0) {
+                        AccessibilityNodeInfo node = titles.get(0);
+                        String content = node.getText().toString();
 
-                    if (checkInfo.contains(Constant.SUCCESS)) {
-                        String dateString = checkInfo.substring(0, checkInfo.indexOf(" "));
-                        if (Operation.isToday(dateString)) {
+                        LogUtils.d("$$$ 检索到的打卡信息" + content);
+
+                        if (content.contains("极速打卡 正常上班")) {
                             LogUtils.d("$$$ 今天极速打卡成功");
                             Account.setIsCheckInToday(true, this);
                             Operation.sendSuccessEmail(this);
                         } else {
-                            LogUtils.d("$$$ 获取到的打卡信息 不是今天的信息 将尝试重新获取");
-                            return;
+                            LogUtils.d("$$$ 极速打卡未成功");
+                            Operation.sendFailEmail(this);
                         }
-                    } else if (checkInfo.contains(Constant.FAIL)) {
-                        LogUtils.d("$$$ 极速打卡未成功");
-                        Operation.sendFailEmail(this);
-                    } else {
-                        LogUtils.d("$$$ 检测到未知的事件类型" + checkInfo);
+
+                        Operation.backToHome(this);
                     }
-                    Operation.backToHome(this);
                 }
             }
         }
     }
+
+//    private void isAlreadyCheckIn() {
+//
+//        if (Account.isCheckInToday(this)) {
+//            return;
+//        }
+//
+//        List<AccessibilityNodeInfo> titleView = findNodeById(Constant.ALL_VIEW_TITLE);
+//        if (titleView.size() > 0) {
+//            String title = titleView.get(0).getText().toString();
+//
+//            if (title.equals(Constant.DEPARTMENT)) {
+//                LogUtils.d("$$$ 打开工作通知页，开始检测是否打卡成功");
+//                List<AccessibilityNodeInfo> listView = findNodeById(Constant.BODY_TITLE);
+//                int size = listView.size();
+//
+//                if (size > 0) {
+//                    AccessibilityNodeInfo info = listView.get(size - 1);
+//                    String checkInfo = info.getText().toString();
+//                    LogUtils.d("$$$ 获取到的打卡情况信息为： " + checkInfo);
+//
+//                    if (checkInfo.contains(Constant.SUCCESS)) {
+//                        String dateString = checkInfo.substring(0, checkInfo.indexOf(" "));
+//                        if (Operation.isToday(dateString)) {
+//                            LogUtils.d("$$$ 今天极速打卡成功");
+//                            Account.setIsCheckInToday(true, this);
+//                            Operation.sendSuccessEmail(this);
+//                        } else {
+//                            LogUtils.d("$$$ 获取到的打卡信息 不是今天的信息 将尝试重新获取");
+//                            return;
+//                        }
+//                    } else if (checkInfo.contains(Constant.FAIL)) {
+//                        LogUtils.d("$$$ 极速打卡未成功");
+//                        Operation.sendFailEmail(this);
+//                    } else {
+//                        LogUtils.d("$$$ 检测到未知的事件类型" + checkInfo);
+//                    }
+//                    Operation.backToHome(this);
+//                }
+//            }
+//        }
+//    }
 
     private void autoLogin() {
 
