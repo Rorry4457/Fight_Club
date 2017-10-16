@@ -131,6 +131,9 @@ public class Operation {
 
     public static boolean turnOnWifi(Context context) {
 
+        //需要点亮屏幕之后打开wifi，才会进行wifi连接。因为系统会出于节能的考虑，不亮屏时不会真正发起wifi连接操作
+        lightUpScreen(context);
+
         LogUtils.d("$$$ 打开Wi-Fi");
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
