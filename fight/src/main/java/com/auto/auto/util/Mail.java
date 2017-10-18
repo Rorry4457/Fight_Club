@@ -1,4 +1,4 @@
-package com.auto.auto.Util;
+package com.auto.auto.util;
 
 import java.util.Date;
 import java.util.Properties;

@@ -34,7 +34,7 @@ public class AutoPushCard extends AccessibilityService {
                 closeWebAlert();
             } else if (eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
                 //界面的切换会多次调用，在这里进行是否打卡成功的检测，比较妥当
-                isAlreadyCheckIn();
+                openWorkNotificationPage();
             }
         }
 
@@ -95,46 +95,49 @@ public class AutoPushCard extends AccessibilityService {
                 if (items.size() > 0) {
                     items.get(0).getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     LogUtils.d("$$$ 打开工作通知页");
+
+                    Operation.takeScreenShot(this);
+                    Account.setIsCheckInToday(true, this);
                 }
             }
         }
     }
 
-    private void isAlreadyCheckIn() {
-
-        if (Account.isCheckInToday(this)) {
-            return;
-        }
-
-        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
-        if (bottomTab.size() > 0) {
-            List<AccessibilityNodeInfo> tableLayout = findNodeById(Constant.MAIN_TABLE_VIEW);
-            if (tableLayout.size() > 0) {
-                List<AccessibilityNodeInfo> items = tableLayout.get(0).findAccessibilityNodeInfosByText(Constant.DEPARTMENT);
-                if (items.size() > 0) {
-
-                    List<AccessibilityNodeInfo> titles = items.get(0).getParent().findAccessibilityNodeInfosByViewId(Constant.TABLE_ITEM_TEXT_VIEW);
-                    if (titles.size() > 0) {
-                        AccessibilityNodeInfo node = titles.get(0);
-                        String content = node.getText().toString();
-
-                        LogUtils.d("$$$ 检索到的打卡信息" + content);
-
-                        if (content.contains("极速打卡 正常上班")) {
-                            LogUtils.d("$$$ 今天极速打卡成功");
-                            Account.setIsCheckInToday(true, this);
-                            Operation.sendSuccessEmail(this);
-                        } else {
-                            LogUtils.d("$$$ 极速打卡未成功");
-                            Operation.sendFailEmail(this);
-                        }
-
-                        Operation.backToHome(this);
-                    }
-                }
-            }
-        }
-    }
+//    private void isAlreadyCheckIn() {
+//
+//        if (Account.isCheckInToday(this)) {
+//            return;
+//        }
+//
+//        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
+//        if (bottomTab.size() > 0) {
+//            List<AccessibilityNodeInfo> tableLayout = findNodeById(Constant.MAIN_TABLE_VIEW);
+//            if (tableLayout.size() > 0) {
+//                List<AccessibilityNodeInfo> items = tableLayout.get(0).findAccessibilityNodeInfosByText(Constant.DEPARTMENT);
+//                if (items.size() > 0) {
+//
+//                    List<AccessibilityNodeInfo> titles = items.get(0).getParent().findAccessibilityNodeInfosByViewId(Constant.TABLE_ITEM_TEXT_VIEW);
+//                    if (titles.size() > 0) {
+//                        AccessibilityNodeInfo node = titles.get(0);
+//                        String content = node.getText().toString();
+//
+//                        LogUtils.d("$$$ 检索到的打卡信息" + content);
+//
+//                        if (content.contains("极速打卡 正常上班")) {
+//                            LogUtils.d("$$$ 今天极速打卡成功");
+//                            Account.setIsCheckInToday(true, this);
+//                            Operation.sendSuccessEmail(this);
+//                        } else {
+//                            LogUtils.d("$$$ 极速打卡未成功");
+//                            Operation.sendFailEmail(this);
+//                        }
+//
+//                        Operation.backToHome(this);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 //    private void isAlreadyCheckIn() {
 //

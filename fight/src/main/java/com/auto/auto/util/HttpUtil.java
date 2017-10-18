@@ -1,4 +1,4 @@
-package com.auto.auto.Util;
+package com.auto.auto.util;
 
 import com.newland.support.nllogger.LogUtils;
 

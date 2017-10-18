@@ -1,4 +1,4 @@
-package com.auto.auto.Util;
+package com.auto.auto.util;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;

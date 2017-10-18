@@ -58,6 +58,16 @@ public class ResultActivity extends AppCompatActivity {
                 Toast.makeText(ResultActivity.this, "Long click to reset", Toast.LENGTH_SHORT).show();
             }
         });
+
+        findViewById(R.id.permission_request).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(ResultActivity.this, PrepareActivity.class);
+                intent.putExtra("FROM", "ResultActivity");
+                startActivity(intent);
+            }
+        });
     }
 
     private String decoratePhoneNum(String num) {

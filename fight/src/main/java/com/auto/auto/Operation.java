@@ -15,12 +15,11 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 
 import com.auto.auto.Model.Account;
-import com.auto.auto.Util.HttpUtil;
-import com.auto.auto.Util.Mail;
+import com.auto.auto.util.FileUtil;
+import com.auto.auto.util.HttpUtil;
+import com.auto.auto.util.Mail;
 import com.newland.support.nllogger.LogUtils;
 
-import java.io.DataOutputStream;
-import java.io.OutputStream;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class Operation {
 
     private static final String MAIN_MAIL_ADDRESS = "monkeyrunanddogrun@yeah.net";
     private static final String MAIN_MAIL_PASSWORD = "ELDao3xmgj";
-    private static final String MAIN_BODY = "在数字时代 对这一类问题的思考就像吃完饭后要洗碗 长发者用完吹风机要清理地上的发丝 以及男性小解后要擦去马桶边沿的尿痕一样重要 妳在为什么而兴奋雀跃 又是因什么而担心受怕 该被取代的工种一定会被取代 该下岗的工人一定会下岗 十九世纪的工人对机器不满可以把它们砸烂 今天妳就算能钻进数据中心 也不可能彻底毁掉所有算法 和机器共处的能力 接受机器挑逗的能力 和机器协商的能力 将会在很大程度上决定我们的心理与生理健康 这是伦理问题 也是人类演化的问题 问题由技术而起 但技术从来不是问题";
+    private static final String MAIN_BODY = "总有人有这样的想法：没关系 封了这个 以后会有别的办法的 这种人的思维就是上有政策下有对策 而且这「别的办法」只有她们才有 其她人只能偷偷摸摸地在地下市场寻求质量存疑的「对策」 长此以往 有办法的人和没办法的人就会彻底成为陌生人 微信能够成为lifestyle 就是因为在中国太多人不在乎也不知道何谓style Style一定是不方便的 微信是非常方便的";
 
     static void startCheckOutOperation(Context context) {
 
@@ -115,7 +114,7 @@ public class Operation {
         calendar.set(Calendar.SECOND, 0);
         Time minLimit = new Time(calendar.getTimeInMillis());
 
-        return now.after(minLimit) ;
+        return now.after(minLimit);
     }
 
     private static void lightUpScreen(Context context) {
@@ -146,15 +145,6 @@ public class Operation {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         return wifiManager.setWifiEnabled(false);
-    }
-
-    public static void authInAndSendEmail(final Context context) {
-        authIn(context, new Runnable() {
-            @Override
-            public void run() {
-                sendSuccessEmail(context);
-            }
-        });
     }
 
     public static boolean openAccessibilitySetting(Context context) {
@@ -265,29 +255,18 @@ public class Operation {
         }
     }
 
-    public static void sendSuccessEmail(Context context) {
+    public static void sendEmailWithAttachment(Context context) {
 
         String mail = Account.getAccountInfo(context).getMail();
 
         if (!TextUtils.isEmpty(mail)) {
-            Operation.sendEmailTo(new String[]{mail}, true);
+            sendEmailTo(new String[]{mail}, FileUtil.getScreenShotsName(context));
         } else {
             LogUtils.d("$$$ 邮箱地址为空");
         }
     }
 
-    public static void sendFailEmail(Context context) {
-
-        String mail = Account.getAccountInfo(context).getMail();
-
-        if (!TextUtils.isEmpty(mail)) {
-            Operation.sendEmailTo(new String[]{mail}, false);
-        } else {
-            LogUtils.d("$$$ 邮箱地址为空");
-        }
-    }
-
-    private static void sendEmailTo(final String[] mailAddresses, final boolean isSuccess) {
+    private static void sendEmailTo(final String[] mailAddresses, final String attachMentFile) {
 
         LogUtils.d("$$$ 开始发送邮件");
         new Thread(new Runnable() {
@@ -297,12 +276,14 @@ public class Operation {
 
                 mail.setTo(mailAddresses);
                 mail.setFrom(MAIN_MAIL_ADDRESS);
-                mail.setSubject(createMailSubject(isSuccess));
+                mail.setSubject(createMailSubject(true));
+                mail.setBody(createMailBody());
 
-                if (isSuccess) {
-                    mail.setBody(createMailBody());
-                } else {
-                    mail.setBody("Lose");
+                //添加附件
+                try {
+                    mail.addAttachment(attachMentFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
                 try {
@@ -356,48 +337,10 @@ public class Operation {
         return body + subBody;
     }
 
-    private static boolean haveRoot() {
+    public static void takeScreenShot(Context context) {
 
-        int i = execRootCmdSilent("echo test"); // 通过执行测试命令来检测
-        return i != -1;
-    }
-
-    private static int execRootCmdSilent(String paramString) {
-        try {
-            Process localProcess = Runtime.getRuntime().exec("su");
-            Object localObject = localProcess.getOutputStream();
-            DataOutputStream localDataOutputStream = new DataOutputStream(
-                    (OutputStream) localObject);
-            String str = String.valueOf(paramString);
-            localObject = str + "\n";
-            localDataOutputStream.writeBytes((String) localObject);
-            localDataOutputStream.flush();
-            localDataOutputStream.writeBytes("exit\n");
-            localDataOutputStream.flush();
-            localProcess.waitFor();
-            int result = localProcess.exitValue();
-            return result;
-        } catch (Exception localException) {
-            localException.printStackTrace();
-            return -1;
-        }
-    }
-
-    private boolean isRoot() {
-        try {
-            Process pro = Runtime.getRuntime().exec("su");
-            pro.getOutputStream().write("exit\n".getBytes());
-            pro.getOutputStream().flush();
-            int i = pro.waitFor();
-            if (0 == i) {
-                pro = Runtime.getRuntime().exec("su");
-                return true;
-            }
-
-        } catch (Exception e) {
-            return false;
-        }
-        return false;
-
+        Intent intent = new Intent(context, PrepareActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

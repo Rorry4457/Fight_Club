@@ -2,7 +2,7 @@ package com.auto.auto;
 
 import android.content.Context;
 
-import com.auto.auto.Util.AlarmClock;
+import com.auto.auto.util.AlarmClock;
 
 public class CheckListener implements AlarmClock.TimeoutListener {
     @Override

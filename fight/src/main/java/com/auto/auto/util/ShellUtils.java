@@ -1,4 +1,4 @@
-package com.auto.auto.Util;
+package com.auto.auto.util;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

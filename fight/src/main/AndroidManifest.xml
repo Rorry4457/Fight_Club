@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".FightApp"
@@ -30,6 +32,8 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
+        <service android:name=".util.ScreenShotService" />
+
         <receiver android:name=".receive.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -38,14 +42,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".Util.AlarmClock$SendReceiver">
+        <receiver android:name=".util.AlarmClock$SendReceiver">
             <intent-filter>
                 <action android:name="com.fight.club.check.in" />
                 <action android:name="com.fight.club.check.out" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".receive.WifiReceiver">
             <intent-filter>
                 <action android:name="android.net.wifi.STATE_CHANGE" />
@@ -63,6 +65,9 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".ResultActivity" />
+        <activity
+            android:name=".PrepareActivity"
+            android:theme="@android:style/Theme.Translucent" />
     </application>
 
 </manifest>

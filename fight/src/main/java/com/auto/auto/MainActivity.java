@@ -88,8 +88,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnF
                         finish();
                         break;
                     default:
-                        Toast.makeText(MainActivity.this,"Not finished yet",Toast.LENGTH_SHORT).show();
-                        // TODO: 2017/4/11 回退一项
+                        Toast.makeText(MainActivity.this, "Not finished yet", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

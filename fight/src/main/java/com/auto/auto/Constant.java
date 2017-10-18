@@ -30,7 +30,6 @@ public class Constant {
     //key
     public static final String ACCOUNT = "com.fight.club.account";
 
-    public static final String SETTING = "com.android.settings";
     public static final String NET_AUTH_USER = "username";
     public static final String NET_AUTH_PASSWORD = "password";
     public static final String NET_AUTH_PWD = "pwd";
@@ -51,7 +50,5 @@ public class Constant {
     public static final int CHECK_OUT = 1002;
     public static final int CHECK_WIFI = 1003;
     //
-    public static final String SUCCESS = "打卡成功";
     public static final String DEPARTMENT = "工作通知:新大陆支付-云端支付-系统研发部";//部门标题
-    public static final String FAIL = "别忘记打卡哦";
 }

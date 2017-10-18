@@ -7,12 +7,12 @@ import android.content.Intent;
 import com.auto.auto.Model.Account;
 import com.auto.auto.CheckListener;
 import com.auto.auto.Operation;
-import com.auto.auto.Util.AlarmClock;
+import com.auto.auto.util.AlarmClock;
 import com.newland.support.nllogger.LogUtils;
 
 public class BootReceiver extends BroadcastReceiver {
     private static int MAX_DELAY = 6;
-    private static int MIN_DELAY = 3;
+    private static int MIN_DELAY = 1;
 
 //    private static int MIN_DELAY = 5;
 //    private static int MAX_DELAY = 10;
