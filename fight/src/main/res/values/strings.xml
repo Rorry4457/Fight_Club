@@ -14,14 +14,10 @@
     <string name="step_two_instruction">Turn On Accessibility</string>
     <string name="step_three">Third Step :</string>
     <string name="step_three_instruction">Schedule Your Device Boot Time</string>
-    <string name="save_login_info">Save Info</string>
     <string name="rule_one">1st RULE: You do not talk about FIGHT CLUB.</string>
     <string name="rule_two">2nd RULE: You DO NOT talk about FIGHT CLUB.</string>
-    <string name="result_label">You\'ve ben a member of Fight Club</string>
-    <string name="result_subLabel">Welcome</string>
     <string name="reset">Reset Info</string>
     <string name="check_accessibility">Review Accessibility</string>
-    <string name="font_fontFamily_medium">sans-serif</string>
     <string name="step_cancel">Cancel</string>
     <string name="step_continue">Continue</string>
     <string name="step_finish">Finish</string>
@@ -30,4 +26,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="request_permission">REQUEST PERMISSION</string>
+    <string name="login_item">login_item</string>
 </resources>

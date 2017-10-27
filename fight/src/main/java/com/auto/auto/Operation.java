@@ -134,7 +134,7 @@ public class Operation {
         lightUpScreen(context);
 
         LogUtils.d("$$$ 打开Wi-Fi");
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         return wifiManager.isWifiEnabled() || wifiManager.setWifiEnabled(true);
     }
@@ -142,7 +142,7 @@ public class Operation {
     public static boolean turnOffWifi(Context context) {
 
         LogUtils.d("$$$ 关闭Wi-Fi");
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         return wifiManager.setWifiEnabled(false);
     }

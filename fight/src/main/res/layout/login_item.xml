@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
+        android:contentDescription="@string/login_item"
         android:scaleType="center"
         android:src="@mipmap/drag_icon" />
 

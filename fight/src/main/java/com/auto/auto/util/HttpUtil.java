@@ -76,10 +76,10 @@ public class HttpUtil {
      * Param     :   inputStream服务器的响应输入流
      */
     public static String dealResponseResult(InputStream inputStream) {
-        String resultData = null;      //存储处理结果
+        String resultData;      //存储处理结果
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] data = new byte[1024];
-        int len = 0;
+        int len;
         try {
             while ((len = inputStream.read(data)) != -1) {
                 byteArrayOutputStream.write(data, 0, len);
