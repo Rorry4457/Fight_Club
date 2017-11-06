@@ -98,8 +98,14 @@ public class AutoPushCard extends AccessibilityService {
 
                     Operation.takeScreenShot(this);
                     Account.setIsCheckInToday(true, this);
+                } else {
+                    LogUtils.d("$$$ 未能打开工作通知页");
                 }
+            } else {
+                LogUtils.d("$$$ 未发现部门打卡状况cell");
             }
+        } else {
+            LogUtils.d("$$$ 未发现底部tabBar");
         }
     }
 
@@ -222,6 +228,11 @@ public class AutoPushCard extends AccessibilityService {
 
     public List<AccessibilityNodeInfo> findNodeById(final String id) {
         AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
+
+        if (rootInActiveWindow == null) {
+            LogUtils.d("$$$ 未能正常获取rootActivateWindow");
+            return new ArrayList<>();
+        }
 
         try {
             return rootInActiveWindow.findAccessibilityNodeInfosByViewId(id);
