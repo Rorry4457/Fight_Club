@@ -38,6 +38,8 @@ public class Operation {
 
     static void startCheckOutOperation(Context context) {
 
+        FileUtil.cleanScreenCapture(context);
+
         LogUtils.d("$$$ 下班打卡");
         MediaPlayer mp = MediaPlayer.create(context, R.raw.check_out_sound);
         mp.start();

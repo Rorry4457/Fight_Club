@@ -3,6 +3,8 @@ package com.auto.auto.util;
 import android.content.Context;
 import android.os.Environment;
 
+import com.newland.support.nllogger.LogUtils;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,8 +38,45 @@ public class FileUtil {
 
     }
 
+    public static void cleanScreenCapture(Context context) {
 
-    private static String getScreenShots(Context context) {
+        File file = new File(getScreenShotsPath(context));
+        long fileSize = getFileSize(file);
+
+        if (fileSize > 2 * 1024 * 1024) {
+
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                for (File f : files) {
+                    LogUtils.d("$$$ 图片名称 " + f.getName() + " deleted status " + f.delete());
+                }
+            }
+        } else {
+            LogUtils.d("$$$ 未超出容量限制");
+        }
+    }
+
+    private static long getFileSize(File file) {
+
+        if (!file.exists()) {
+            return 0;
+        }
+
+        long size = 0;
+        File[] files = file.listFiles();
+
+        if (files == null) {
+            size += file.length();
+        } else {
+            for (File f : files) {
+                size += getFileSize(f);
+            }
+        }
+
+        return size;
+    }
+
+    private static String getScreenShotsPath(Context context) {
 
         StringBuilder stringBuffer = new StringBuilder(getAppPath(context));
         stringBuffer.append(File.separator);
@@ -60,7 +99,7 @@ public class FileUtil {
 
         String date = simpleDateFormat.format(new Date());
 
-        return getScreenShots(context) + SCREENSHOT_NAME + "_" + date + ".png";
+        return getScreenShotsPath(context) + SCREENSHOT_NAME + "_" + date + ".png";
     }
 
     public static String getLogPath() {
