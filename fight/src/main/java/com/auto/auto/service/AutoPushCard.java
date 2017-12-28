@@ -58,6 +58,12 @@ public class AutoPushCard extends AccessibilityService {
                 toWorkPageButton.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 openCheckOutPage();
             }
+        } else {
+            LogUtils.d("$$$ 下班打卡未发现底部tabBar，点击返回按钮");
+            List<AccessibilityNodeInfo> backButton = findNodeById(Constant.BACK_BUTTON);
+            if (backButton.size() > 0) {
+                backButton.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            }
         }
     }
 
@@ -111,8 +117,7 @@ public class AutoPushCard extends AccessibilityService {
 
     private void autoLogin() {
 
-        List<AccessibilityNodeInfo> loginLayout = findNodeById(Constant.LOGIN_LAYOUT);
-        if (loginLayout != null && loginLayout.size() > 0 && !isLoginOperate) {
+        if (!isLoginOperate) {
             isLoginOperate = true;
             //在登录界面 需要登录钉钉
             LogUtils.d("$$$ 需要登录  找到登录界面的控件 :");
@@ -122,17 +127,23 @@ public class AutoPushCard extends AccessibilityService {
             List<AccessibilityNodeInfo> loginBtn = findNodeById(Constant.LOGIN_BTN);
             Account account = Account.getAccountInfo(this);
 
-            AccessibilityNodeInfo phone = phoneEt.get(0);
-            phone.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            setText(phone, account.getPhoneNum());
+            if (phoneEt.size() > 0) {
+                AccessibilityNodeInfo phone = phoneEt.get(0);
+                phone.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                setText(phone, account.getPhoneNum());
+            }
 
-
-            AccessibilityNodeInfo password = pwdEt.get(0);//设置登录密码
-            setText(password, account.getDingDingPassword());
+            if (pwdEt.size() > 0) {
+                AccessibilityNodeInfo password = pwdEt.get(0);//设置登录密码
+                setText(password, account.getDingDingPassword());
+            }
 
             LogUtils.d("$$$ 完成输入账户信息");
-            loginBtn.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            LogUtils.d("$$$ 开始登录");
+
+            if (loginBtn.size() > 0) {
+                loginBtn.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                LogUtils.d("$$$ 开始登录");
+            }
         }
     }
 

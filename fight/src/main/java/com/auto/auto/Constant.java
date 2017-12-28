@@ -4,8 +4,7 @@ public class Constant {
 
     public static final String DING_PACKAGE_NAME = "com.alibaba.android.rimet"; //钉钉的包名
     // 钉钉登录页面
-    public static final String LOGIN_LAYOUT = "com.alibaba.android.rimet:id/sign_up_with_pwd_top_rl"; //登录界面root id
-    public static final String LOGIN_PHONE_EDITTEXT = "com.alibaba.android.rimet:id/et_phone_input"; // 登录界面 手机号码输入框
+    public static final String LOGIN_PHONE_EDITTEXT = "adb:id/et_phone_input"; // 登录界面 手机号码输入框
     public static final String LOGIN_PASSWROD_EDITTEXT = "com.alibaba.android.rimet:id/et_pwd_login"; // 登录界面 手机号码输入框
     public static final String LOGIN_BTN = "com.alibaba.android.rimet:id/btn_next"; // 登录界面 登录按钮
     public static final String WEB_VIEW = "com.alibaba.android.rimet:id/common_webview";
@@ -13,6 +12,7 @@ public class Constant {
     // 钉钉主页
     public static final String BOTTOM_TAB_LAYOUT = "com.alibaba.android.rimet:id/bottom_tab"; // 底部导航按钮
     public static final String MAIN_TABLE_VIEW = "com.alibaba.android.rimet:id/session_list";//首页列表
+    public static final String BACK_BUTTON = "com.alibaba.android.rimet:id/img_back";//返回按钮
     public static final String TABLE_ITEM_TEXT_VIEW = "com.alibaba.android.rimet:id/session_content_tv";//首页列表内的提示信息
     public static final String ALL_VIEW_TITLE = "com.alibaba.android.rimet:id/tv_title";
     public static final String BODY_TITLE = "com.alibaba.android.rimet:id/tv_body_title";
