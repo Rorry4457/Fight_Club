@@ -46,6 +46,27 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
+    private void findAndClickCheckoutBtn() {
+        List<AccessibilityNodeInfo> webList = findNodeById(Constant.WEB_VIEW);
+        if (webList != null & webList.size() > 0) {
+            final AccessibilityNodeInfo webNode = webList.get(0);
+            try {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            webNode.getChild(0).getChild(0).getChild(2).getChild(1).getChild(1).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void startCheckOut() {
         if (isAlreadyOpenCheckOut) {
             return;
@@ -57,6 +78,7 @@ public class AutoPushCard extends AccessibilityService {
             if (toWorkPageButton.size() > 0) {
                 toWorkPageButton.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 openCheckOutPage();
+                findAndClickCheckoutBtn();
             }
         } else {
             LogUtils.d("$$$ 下班打卡未发现底部tabBar，点击返回按钮");
