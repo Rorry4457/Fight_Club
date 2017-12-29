@@ -44,6 +44,33 @@ public class AutoPushCard extends AccessibilityService {
                 startCheckOut();
             }
         }
+
+        if (Operation.isInCheckInDuration()) {
+            if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)){
+                findAndClickCheckoutBtn();
+            }
+        }
+    }
+
+    private void findAndClickCheckoutBtn() {
+        List<AccessibilityNodeInfo> webList = findNodeById(Constant.WEB_VIEW);
+        if (webList != null & webList.size() > 0) {
+            final AccessibilityNodeInfo webNode = webList.get(0);
+            try {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            webNode.getChild(0).getChild(0).getChild(2).getChild(1).getChild(1).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void startCheckOut() {
