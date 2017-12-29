@@ -44,6 +44,12 @@ public class AutoPushCard extends AccessibilityService {
                 startCheckOut();
             }
         }
+
+        if (Operation.isInCheckInDuration()) {
+            if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)){
+                findAndClickCheckoutBtn();
+            }
+        }
     }
 
     private void findAndClickCheckoutBtn() {
@@ -78,7 +84,6 @@ public class AutoPushCard extends AccessibilityService {
             if (toWorkPageButton.size() > 0) {
                 toWorkPageButton.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 openCheckOutPage();
-                findAndClickCheckoutBtn();
             }
         } else {
             LogUtils.d("$$$ 下班打卡未发现底部tabBar，点击返回按钮");
