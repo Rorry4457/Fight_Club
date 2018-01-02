@@ -282,10 +282,12 @@ public class Operation {
                 mail.setBody(createMailBody());
 
                 //添加附件
-                try {
-                    mail.addAttachment(attachMentFile);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (attachMentFile != null) {
+                    try {
+                        mail.addAttachment(attachMentFile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 try {
