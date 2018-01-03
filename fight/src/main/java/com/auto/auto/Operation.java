@@ -262,7 +262,7 @@ public class Operation {
         String mail = Account.getAccountInfo(context).getMail();
 
         if (!TextUtils.isEmpty(mail)) {
-            sendEmailTo(new String[]{mail}, FileUtil.getScreenShotsName(context));
+            sendEmailTo(new String[]{mail}, null);
         } else {
             LogUtils.d("$$$ 邮箱地址为空");
         }

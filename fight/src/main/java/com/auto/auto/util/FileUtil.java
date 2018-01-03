@@ -43,7 +43,7 @@ public class FileUtil {
         File file = new File(getScreenShotsPath(context));
         long fileSize = getFileSize(file);
 
-        if (fileSize > 2 * 1024 * 1024) {
+        if (fileSize > 0) {
 
             if (file.isDirectory()) {
                 File[] files = file.listFiles();

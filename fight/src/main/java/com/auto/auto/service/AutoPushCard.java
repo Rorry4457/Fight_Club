@@ -71,6 +71,7 @@ public class AutoPushCard extends AccessibilityService {
                     public void run() {
                         try {
                             CharSequence result = nodeInfo.getChild(0).getChild(0).getChild(2).getChild(0).getChild(3).getContentDescription();
+                            LogUtils.d(String.format("$$$ 打卡 %s", result));
                             if (result.equals("正常")) {
 
                                 Account.setIsCheckInToday(true, AutoPushCard.this);
@@ -78,7 +79,6 @@ public class AutoPushCard extends AccessibilityService {
                                 Operation.backToHome(AutoPushCard.this);
                             }
 
-                            LogUtils.d(String.format("$$$ 打卡 %s", result));
 
                         } catch (Exception e) {
                             e.printStackTrace();
