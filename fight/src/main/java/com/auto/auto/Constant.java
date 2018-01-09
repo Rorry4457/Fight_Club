@@ -13,6 +13,7 @@ public class Constant {
     public static final String BOTTOM_TAB_LAYOUT = "com.alibaba.android.rimet:id/bottom_tab"; // 底部导航按钮
     public static final String MAIN_TABLE_VIEW = "com.alibaba.android.rimet:id/session_list";//首页列表
     public static final String BACK_BUTTON = "com.alibaba.android.rimet:id/img_back";//返回按钮
+    public static final String BACK_LAYOUT = "com.alibaba.android.rimet:id/back_layout";
     public static final String TABLE_ITEM_TEXT_VIEW = "com.alibaba.android.rimet:id/session_content_tv";//首页列表内的提示信息
     public static final String ALL_VIEW_TITLE = "com.alibaba.android.rimet:id/tv_title";
     public static final String BODY_TITLE = "com.alibaba.android.rimet:id/tv_body_title";

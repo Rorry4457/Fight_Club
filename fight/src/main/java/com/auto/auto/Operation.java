@@ -224,7 +224,8 @@ public class Operation {
 
                 if (uiRunnable != null) {
                     Handler uiHandler = new Handler(Looper.getMainLooper());
-                    uiHandler.post(uiRunnable);
+                    LogUtils.d("$$$ 延时5s");
+                    uiHandler.postDelayed(uiRunnable, 5000);
                 }
             }
         }).start();
