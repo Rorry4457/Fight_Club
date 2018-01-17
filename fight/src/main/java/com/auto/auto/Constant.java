@@ -28,6 +28,7 @@ public class Constant {
     public static final String WORK_CHECK_TEXT = "考勤打卡";
 
     public static final String CLOSE_BTN = "com.alibaba.android.rimet:id/close";
+    public static final String CLOSE_DIALOG = "com.alibaba.android.rimet:id/iv_dialog_close";
     public static final String WEB_ALERT = "com.alibaba.android.rimet:id/webview_container";
     //key
     public static final String ACCOUNT = "com.fight.club.account";
