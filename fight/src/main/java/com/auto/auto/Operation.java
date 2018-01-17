@@ -96,7 +96,7 @@ public class Operation {
         Time minLimit = new Time(calendar.getTimeInMillis());
 
         calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 46);
+        calendar.set(Calendar.MINUTE, 48);
         calendar.set(Calendar.SECOND, 0);
         Time maxLimit = new Time(calendar.getTimeInMillis());
 

@@ -96,7 +96,7 @@ public class AutoPushCard extends AccessibilityService {
             public void run() {
                 try {
                     //打卡按钮的点击触发事件不稳定
-                    AccessibilityNodeInfo firstNode = nodeInfo.getChild(0).getChild(0).getChild(2).getChild(0).getChild(1);
+                    AccessibilityNodeInfo firstNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(0).getChild(1);
                     boolean isClick = firstNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
                     LogUtils.d("$$$ 点击了上班打卡按钮" + isClick);
@@ -114,7 +114,7 @@ public class AutoPushCard extends AccessibilityService {
             @Override
             public void run() {
                 try {
-                    AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(2).getChild(1).getChild(1);
+                    AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(1).getChild(1).getParent();
                     boolean isClick = checkOutNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
                     LogUtils.d("$$$ 点击了下班打卡按钮" + isClick);
@@ -225,6 +225,15 @@ public class AutoPushCard extends AccessibilityService {
                 return;
             } else {
                 findAndClickCheckInButton(nodeInfo);
+            }
+
+            //遍历15次仍未打上卡，则回退刷新页面
+            if (i == 14) {
+
+                if (nodeInfo != null) {
+                    nodeInfo.recycle();
+                }
+                backToRefresh();
             }
         }
     }
