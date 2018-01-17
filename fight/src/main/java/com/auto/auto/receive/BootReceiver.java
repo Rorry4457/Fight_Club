@@ -22,6 +22,7 @@ public class BootReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             LogUtils.d("$$$ 收到开机广播");
             Account.setIsCheckInToday(false, context);
+            Account.setIsCheckOutToday(false, context);
 
             CheckListener checkListener = new CheckListener();
 

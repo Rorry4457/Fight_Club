@@ -71,15 +71,34 @@ public class Account implements Serializable {
         return account.isCheckInToday();
     }
 
+    public static boolean isCheckOutToady(Context context) {
+        Account account = getAccountInfo(context);
+        return account.isCheckOutToday();
+    }
+
     public static void setIsCheckInToday(boolean isCheckInToday, Context context) {
         Account account = getAccountInfo(context);
         account.setCheckInToday(isCheckInToday);
         account.saveAccountInfo(account, context);
     }
 
+    public static void setIsCheckOutToday(boolean isCheckOutToday, Context context) {
+        Account account = getAccountInfo(context);
+        account.setCheckOutToday(isCheckOutToday);
+        account.saveAccountInfo(account, context);
+    }
+
     public static void clearAccount(Context context) {
         Account account = getAccountInfo(context);
         account.saveAccountInfo(new Account(), context);
+    }
+
+    private boolean isCheckOutToday() {
+        return isCheckOutToday;
+    }
+
+    private void setCheckOutToday(boolean checkOutToday) {
+        isCheckOutToday = checkOutToday;
     }
 
     private void setCheckInToday(boolean checkInToday) {
@@ -152,4 +171,5 @@ public class Account implements Serializable {
     private String mail = "";
     private String authAccountPassword = "";
     private boolean isCheckInToday = false;
+    private boolean isCheckOutToday = false;
 }
