@@ -98,8 +98,10 @@ public class AutoPushCard extends AccessibilityService {
                     //打卡按钮的点击触发事件不稳定
                     AccessibilityNodeInfo firstNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(0).getChild(1);
                     boolean isClick = firstNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Thread.sleep(450);
+                    boolean isClick2 = firstNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
-                    LogUtils.d("$$$ 点击了上班打卡按钮" + isClick);
+                    LogUtils.d("$$$ 点击了上班打卡按钮" + isClick + " " + isClick2);
                 } catch (Exception e) {
                     LogUtils.d("$$$ 未找到上班打卡按钮");
                 }
@@ -116,8 +118,10 @@ public class AutoPushCard extends AccessibilityService {
                 try {
                     AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(1).getChild(1).getParent();
                     boolean isClick = checkOutNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Thread.sleep(450);
+                    boolean isClick2 = checkOutNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
-                    LogUtils.d("$$$ 点击了下班打卡按钮" + isClick);
+                    LogUtils.d("$$$ 点击了下班打卡按钮" + isClick + " " + isClick2);
                 } catch (Exception e) {
                     LogUtils.d("$$$ 未找到下班打卡按钮");
                 }
