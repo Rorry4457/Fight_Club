@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.auto.auto">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -12,6 +13,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.INJECT_EVENTS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name=".FightApp"
@@ -31,7 +35,6 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
-
         <service android:name=".util.ScreenShotService" />
 
         <receiver android:name=".receive.BootReceiver">
@@ -67,6 +70,9 @@
         <activity android:name=".ResultActivity" />
         <activity
             android:name=".PrepareActivity"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".TransparentActivity"
             android:theme="@android:style/Theme.Translucent" />
     </application>
 

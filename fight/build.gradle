@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "com.fight.club"
         minSdkVersion 21
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
-        versionName "2.2.3"
+        versionName "2.2.6"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -40,9 +40,9 @@ android {
     }
 }
 
-repositories{
-    flatDir{
-        dirs'libs'
+repositories {
+    flatDir {
+        dirs 'libs'
     }
 }
 

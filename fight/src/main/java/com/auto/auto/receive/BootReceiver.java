@@ -35,7 +35,7 @@ public class BootReceiver extends BroadcastReceiver {
         } else if (intent.getAction().equals(Intent.ACTION_SHUTDOWN)) {
             LogUtils.d("$$$ 收到关机广播");
 
-            //仅在下班后关系会关闭wifi，避免工作是重启设备导致wifi。
+            //仅在下班后关系会关闭wifi，避免上班期间重启设备导致wifi关闭。
             if (Operation.isAfterWorkingTime()) {
                 Operation.turnOffWifi(context);
             }

@@ -348,4 +348,11 @@ public class Operation {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
+
+    public static void pushTransparentActivity(Context context) {
+
+        Intent intent = new Intent(context, TransparentActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 }

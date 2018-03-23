@@ -29,7 +29,7 @@ public class AutoPushCard extends AccessibilityService {
             if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
                 autoLogin();
                 closeWebAlert();
-                closeUpdateDilog();
+                closeUpdateDialog();
                 openCheckPage(true);
             }
         }
@@ -38,7 +38,7 @@ public class AutoPushCard extends AccessibilityService {
 
             if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
                 autoLogin();
-                closeUpdateDilog();
+                closeUpdateDialog();
                 openCheckPage(false);
             }
         }
@@ -67,27 +67,6 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
-    private boolean isAutoCheckInSuccess(AccessibilityNodeInfo nodeInfo) {
-
-        LogUtils.d(" $$$ 正在检索上班打卡信息");
-
-        try {
-            CharSequence result = nodeInfo.getChild(0).getChild(0).getChild(4).getChild(0).getChild(3).getContentDescription();
-
-            LogUtils.d(String.format("$$$ 打卡 %s", result));
-            if (result.equals("正常")) {
-                Account.setIsCheckInToday(true, AutoPushCard.this);
-                Operation.sendEmailWithAttachment(AutoPushCard.this);
-            }
-            Operation.backToHome(AutoPushCard.this);
-            return true;
-
-        } catch (Exception e) {
-            LogUtils.d("$$$ 未打卡");
-            return false;
-        }
-    }
-
     private void findAndClickCheckInButton(final AccessibilityNodeInfo nodeInfo) {
 
         LogUtils.d(" $$$ 正在搜寻「上班」打卡按钮");
@@ -98,10 +77,8 @@ public class AutoPushCard extends AccessibilityService {
                     //打卡按钮的点击触发事件不稳定
                     AccessibilityNodeInfo firstNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(0).getChild(1);
                     boolean isClick = firstNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    Thread.sleep(450);
-                    boolean isClick2 = firstNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
-                    LogUtils.d("$$$ 点击了上班打卡按钮" + isClick + " " + isClick2);
+                    LogUtils.d("$$$ 点击了上班打卡按钮" + isClick + " ");
                 } catch (Exception e) {
                     LogUtils.d("$$$ 未找到上班打卡按钮");
                 }
@@ -116,12 +93,10 @@ public class AutoPushCard extends AccessibilityService {
             @Override
             public void run() {
                 try {
-                    AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(1).getChild(1).getParent();
+                    AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(1).getChild(1);
                     boolean isClick = checkOutNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    Thread.sleep(450);
-                    boolean isClick2 = checkOutNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
-                    LogUtils.d("$$$ 点击了下班打卡按钮" + isClick + " " + isClick2);
+                    LogUtils.d("$$$ 点击了下班打卡按钮" + isClick + " ");
                 } catch (Exception e) {
                     LogUtils.d("$$$ 未找到下班打卡按钮");
                 }
@@ -143,6 +118,27 @@ public class AutoPushCard extends AccessibilityService {
             return false;
 
         } catch (Exception exception) {
+            return false;
+        }
+    }
+
+    private boolean isCheckInSuccess(AccessibilityNodeInfo nodeInfo) {
+
+        LogUtils.d(" $$$ 正在检索上班打卡信息");
+
+        try {
+            CharSequence result = nodeInfo.getChild(0).getChild(0).getChild(4).getChild(0).getChild(3).getContentDescription();
+
+            LogUtils.d(String.format("$$$ 打卡 %s", result));
+            if (result.equals("正常")) {
+                Account.setIsCheckInToday(true, AutoPushCard.this);
+                Operation.sendEmailWithAttachment(AutoPushCard.this);
+            }
+            Operation.backToHome(AutoPushCard.this);
+            return true;
+
+        } catch (Exception e) {
+            LogUtils.d("$$$ 未打卡");
             return false;
         }
     }
@@ -176,137 +172,101 @@ public class AutoPushCard extends AccessibilityService {
         } else {
 
             //判断是否已经在打卡页面内
-            List<AccessibilityNodeInfo> titles = findNodeById(Constant.TITLE);
-            if (titles != null && titles.size() > 0) {
-
-                CharSequence title = titles.get(0).getText();
-                if (title != null && title.equals("新大陆支付-云端支付-系统研发部")) {
-                    LogUtils.d("$$$ 已经进入打卡页面");
-                    startToCheck(isCheckIn);
-                }
-
-                recycleNodes(titles);
+            if (isWebPageLoaded()) {
+                startToCheck(isCheckIn);
             }
         }
     }
 
     private void startCheckInProcessNew() {
 
-        for (int i = 0; i < 15; i++) {
+        AccessibilityNodeInfo nodeInfo = null;
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        List<AccessibilityNodeInfo> webList = findNodeById(Constant.WEB_VIEW);
+        if (webList != null && webList.size() > 0) {
+            nodeInfo = webList.get(0);
 
-            AccessibilityNodeInfo nodeInfo = null;
-
-            List<AccessibilityNodeInfo> webList = findNodeById(Constant.WEB_VIEW);
-            if (webList != null && webList.size() > 0) {
-                nodeInfo = webList.get(0);
-
-                //回收nodeInfo。第一个元素流程结束时回收，这里仅回收第二个及以后的元素。
-                if (webList.size() > 1) {
-                    for (int j = 1; j < webList.size(); j++) {
-                        webList.get(j).recycle();
-                    }
+            //回收nodeInfo。第一个元素流程结束时回收，这里仅回收第二个及以后的元素。
+            if (webList.size() > 1) {
+                for (int j = 1; j < webList.size(); j++) {
+                    webList.get(j).recycle();
                 }
             }
+        }
 
-            //判断网络挂掉
-            if (isNetworkDown(nodeInfo)) {
-                return;
+        //判断网络挂掉
+        if (isNetworkDown(nodeInfo)) {
+            return;
+        }
+
+        //判断是否已经极速打卡
+        if (isCheckInSuccess(nodeInfo)) {
+
+            if (nodeInfo != null) {
+                nodeInfo.recycle();
             }
 
-            //判断是否已经极速打卡
-            if (isAutoCheckInSuccess(nodeInfo)) {
-
-                if (nodeInfo != null) {
-                    nodeInfo.recycle();
-                }
-
-                return;
-            } else {
-                findAndClickCheckInButton(nodeInfo);
-            }
-
-            //遍历15次仍未打上卡，则回退刷新页面
-            if (i == 14) {
-
-                if (nodeInfo != null) {
-                    nodeInfo.recycle();
-                }
-                backToRefresh();
-            }
+        } else {
+            findAndClickCheckInButton(nodeInfo);
+            pushAndBack();
         }
     }
 
     private void startCheckOutProcessNew() {
-        for (int i = 0; i < 15; i++) {
 
+        AccessibilityNodeInfo nodeInfo = null;
+
+        List<AccessibilityNodeInfo> webList = findNodeById(Constant.WEB_VIEW);
+        if (webList != null && webList.size() > 0) {
+            nodeInfo = webList.get(0);
+
+            //回收nodeInfo。第一个元素流程结束时回收，这里仅回收第二个及以后的元素。
+            if (webList.size() > 1) {
+                for (int j = 1; j < webList.size(); j++) {
+                    webList.get(j).recycle();
+                }
+            }
+        }
+
+        //判断是否已经完成页面载入
+        if (isWebPageLoaded()) {
+
+            if (isCheckOutSuccess(nodeInfo)) {
+                if (nodeInfo != null) {
+                    nodeInfo.recycle();
+                }
+            } else {
+                findAndClickCheckoutBtn(nodeInfo);
+                pushAndBack();
+            }
+        } else {
+            //未完成载入，则延迟两秒后递归
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            AccessibilityNodeInfo nodeInfo = null;
-
-            List<AccessibilityNodeInfo> webList = findNodeById(Constant.WEB_VIEW);
-            if (webList != null && webList.size() > 0) {
-                nodeInfo = webList.get(0);
-
-                //回收nodeInfo。第一个元素流程结束时回收，这里仅回收第二个及以后的元素。
-                if (webList.size() > 1) {
-                    for (int j = 1; j < webList.size(); j++) {
-                        webList.get(j).recycle();
-                    }
-                }
-            }
-
-            //判断是否已经打上下班卡
-            if (isCheckOutSuccess(nodeInfo)) {
-
-                if (nodeInfo != null) {
-                    nodeInfo.recycle();
-                }
-                return;
-            } else {
-                findAndClickCheckoutBtn(nodeInfo);
-            }
-
-            //遍历15次仍未打上卡，则回退刷新页面
-            if (i == 14) {
-
-                if (nodeInfo != null) {
-                    nodeInfo.recycle();
-                }
-                backToRefresh();
-            }
+            startCheckOutProcessNew();
         }
     }
 
-//    private void startCheckOutProcess() {
-//        if (isAlreadyOpenCheckPage) {
-//            return;
-//        }
+    private boolean isWebPageLoaded() {
 
-//        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
-//        if (bottomTab.size() > 0) {
-//            List<AccessibilityNodeInfo> toWorkPageButton = bottomTab.get(0).findAccessibilityNodeInfosByViewId(Constant.TAB_FOR_WORK);
-//            if (toWorkPageButton.size() > 0) {
-//                toWorkPageButton.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//                openCheckPage();
-//            }
-//        } else {
-//            LogUtils.d("$$$ 下班打卡未发现底部tabBar，点击返回按钮");
-//            List<AccessibilityNodeInfo> backButton = findNodeById(Constant.BACK_BUTTON);
-//            if (backButton.size() > 0) {
-//                backButton.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//            }
-//        }
-//    }
+        List<AccessibilityNodeInfo> nodeInfoList = findNodeById(Constant.TITLE);
+        if (nodeInfoList != null && nodeInfoList.size() > 0) {
+
+            CharSequence title = nodeInfoList.get(0).getText();
+            if (title != null && title.equals("新大陆支付-云端支付-系统研发部")) {
+                LogUtils.d("$$$ 打卡页面已经载入");
+
+                recycleNodes(nodeInfoList);
+                return true;
+            }
+        }
+
+        recycleNodes(nodeInfoList);
+        return false;
+    }
 
     private void clickCheckItem(boolean isCheckIn) {
         List<AccessibilityNodeInfo> workLayouts = findNodeById(Constant.WORK_LAYOUT);
@@ -334,6 +294,10 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
+    private void pushAndBack() {
+        Operation.pushTransparentActivity(this);
+    }
+
     private void startToCheck(boolean isCheckIn) {
         if (isCheckIn) {
             startCheckInProcessNew();
@@ -341,33 +305,6 @@ public class AutoPushCard extends AccessibilityService {
             startCheckOutProcessNew();
         }
     }
-
-//    private void openWorkNotificationPage() {
-//        if (Account.isCheckInToday(this)) {
-//            return;
-//        }
-//
-//        List<AccessibilityNodeInfo> bottomTab = findNodeById(Constant.BOTTOM_TAB_LAYOUT);
-//        if (bottomTab.size() > 0) {
-//            List<AccessibilityNodeInfo> tableLayout = findNodeById(Constant.MAIN_TABLE_VIEW);
-//            if (tableLayout.size() > 0) {
-//                List<AccessibilityNodeInfo> items = tableLayout.get(0).findAccessibilityNodeInfosByText(Constant.DEPARTMENT);
-//                if (items.size() > 0) {
-//                    items.get(0).getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//                    LogUtils.d("$$$ 打开工作通知页");
-//
-//                    Operation.takeScreenShot(this);
-//                    Account.setIsCheckInToday(true, this);
-//                } else {
-//                    LogUtils.d("$$$ 未能打开工作通知页");
-//                }
-//            } else {
-//                LogUtils.d("$$$ 未发现部门打卡状况cell");
-//            }
-//        } else {
-//            LogUtils.d("$$$ 未发现底部tabBar");
-//        }
-//    }
 
     private void autoLogin() {
 
@@ -408,7 +345,7 @@ public class AutoPushCard extends AccessibilityService {
         }
     }
 
-    private void closeUpdateDilog() {
+    private void closeUpdateDialog() {
         List<AccessibilityNodeInfo> closeBtn = findNodeById(Constant.CLOSE_DIALOG);
         if (closeBtn != null && closeBtn.size() > 0) {
             LogUtils.d("$$$ 发现更新提醒，执行关闭操作");
