@@ -111,6 +111,7 @@ public class AutoPushCard extends AccessibilityService {
             if (parentNode.getChildCount() == 6) {
                 if (parentNode.getChild(5).getClassName().equals("android.app.Dialog")) {
                     Account.setIsCheckOutToday(true, AutoPushCard.this);
+                    Operation.backToHome(this);
                     LogUtils.d(" $$$ 自动下班打卡成功");
                     return true;
                 }
@@ -127,14 +128,14 @@ public class AutoPushCard extends AccessibilityService {
         LogUtils.d(" $$$ 正在检索上班打卡信息");
 
         try {
-            CharSequence result = nodeInfo.getChild(0).getChild(0).getChild(4).getChild(0).getChild(3).getContentDescription();
+            CharSequence result = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(0).getChild(3).getContentDescription();
 
             LogUtils.d(String.format("$$$ 打卡 %s", result));
             if (result.equals("正常")) {
                 Account.setIsCheckInToday(true, AutoPushCard.this);
                 Operation.sendEmailWithAttachment(AutoPushCard.this);
             }
-            Operation.backToHome(AutoPushCard.this);
+            Operation.backToHome(this);
             return true;
 
         } catch (Exception e) {
@@ -199,17 +200,38 @@ public class AutoPushCard extends AccessibilityService {
             return;
         }
 
-        //判断是否已经极速打卡
-        if (isCheckInSuccess(nodeInfo)) {
+        //判断是否已经完成页面载入
+        if (isWebPageLoaded()) {
 
-            if (nodeInfo != null) {
-                nodeInfo.recycle();
+            if (isCheckInSuccess(nodeInfo)) {
+                if (nodeInfo != null) {
+                    nodeInfo.recycle();
+                }
+            } else {
+                findAndClickCheckInButton(nodeInfo);
+                pushAndBack();
             }
-
         } else {
-            findAndClickCheckInButton(nodeInfo);
-            pushAndBack();
+            //未完成载入，则延迟两秒后递归
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            startCheckInProcessNew();
         }
+
+//        //判断是否已经极速打卡
+//        if (isCheckInSuccess(nodeInfo)) {
+//
+//            if (nodeInfo != null) {
+//                nodeInfo.recycle();
+//            }
+//
+//        } else {
+//            findAndClickCheckInButton(nodeInfo);
+//            pushAndBack();
+//        }
     }
 
     private void startCheckOutProcessNew() {
