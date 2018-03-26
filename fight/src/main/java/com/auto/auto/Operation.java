@@ -231,7 +231,7 @@ public class Operation {
         }).start();
     }
 
-    private static void openDingDing(Context context) {
+    public static void openDingDing(Context context) {
 
         LogUtils.d("$$$ 打开钉钉");
         if (isAppInstalled(context, Constant.DING_PACKAGE_NAME)) {

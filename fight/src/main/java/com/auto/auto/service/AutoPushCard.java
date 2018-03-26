@@ -75,10 +75,10 @@ public class AutoPushCard extends AccessibilityService {
             @Override
             public void run() {
                 try {
-                    //打卡按钮的点击触发事件不稳定
                     AccessibilityNodeInfo firstNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(0).getChild(1);
                     boolean isClick = firstNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
+                    Thread.sleep(15000);
                     LogUtils.d("$$$ 点击了上班打卡按钮" + isClick + " ");
                 } catch (Exception e) {
                     LogUtils.d("$$$ 未找到上班打卡按钮");
@@ -91,7 +91,7 @@ public class AutoPushCard extends AccessibilityService {
 
         LogUtils.d(" $$$ 正在搜寻「下班」打卡按钮");
         try {
-            AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(4).getChild(1).getChild(1);
+            AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(1).getChild(1);
             boolean isClick = checkOutNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
             Thread.sleep(1500);
@@ -204,7 +204,7 @@ public class AutoPushCard extends AccessibilityService {
                 }
             } else {
                 findAndClickCheckInButton(nodeInfo);
-                pushAndBack();
+                homeAndBack();
             }
         } else {
             //未完成载入，则延迟两秒后递归
@@ -216,17 +216,6 @@ public class AutoPushCard extends AccessibilityService {
             startCheckInProcessNew();
         }
 
-//        //判断是否已经极速打卡
-//        if (isCheckInSuccess(nodeInfo)) {
-//
-//            if (nodeInfo != null) {
-//                nodeInfo.recycle();
-//            }
-//
-//        } else {
-//            findAndClickCheckInButton(nodeInfo);
-//            pushAndBack();
-//        }
     }
 
     private void startCheckOutProcessNew() {
@@ -272,12 +261,20 @@ public class AutoPushCard extends AccessibilityService {
         List<AccessibilityNodeInfo> nodeInfoList = findNodeById(Constant.TITLE);
         if (nodeInfoList != null && nodeInfoList.size() > 0) {
 
-            CharSequence title = nodeInfoList.get(0).getText();
-            if (title != null && title.equals("新大陆支付-云端支付-系统研发部")) {
-                LogUtils.d("$$$ 打卡页面已经载入");
-
-                recycleNodes(nodeInfoList);
-                return true;
+            String title = nodeInfoList.get(0).getText().toString();
+            recycleNodes(nodeInfoList);
+            switch (title) {
+                case "新大陆支付-云端支付-系统研发部":
+                    LogUtils.d("$$$ 打开了系统研发部打卡页面");
+                    return true;
+                case "新大陆支付-智能应用部":
+                    LogUtils.d("$$$ 打了软件事业部的打卡页面");
+                    return true;
+                case "福州四正软件技术有限公司":
+                    LogUtils.d("$$$ 打了应用一部的打卡页面");
+                    return true;
+                default:
+                    return false;
             }
         }
 
@@ -313,6 +310,11 @@ public class AutoPushCard extends AccessibilityService {
 
     private void pushAndBack() {
         Operation.pushTransparentActivity(this);
+    }
+
+    private void homeAndBack() {
+        Operation.backToHome(this);
+        Operation.openDingDing(this);
     }
 
     private void startToCheck(boolean isCheckIn) {
