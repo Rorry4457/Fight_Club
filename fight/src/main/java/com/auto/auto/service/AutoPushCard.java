@@ -39,6 +39,7 @@ public class AutoPushCard extends AccessibilityService {
             if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && Constant.DING_PACKAGE_NAME.equals(packageName)) {
                 autoLogin();
                 closeUpdateDialog();
+                closeReCheckOutDialog();
                 openCheckPage(false);
             }
         }
@@ -89,35 +90,29 @@ public class AutoPushCard extends AccessibilityService {
     private void findAndClickCheckoutBtn(final AccessibilityNodeInfo nodeInfo) {
 
         LogUtils.d(" $$$ 正在搜寻「下班」打卡按钮");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(3).getChild(1).getChild(1);
-                    boolean isClick = checkOutNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        try {
+            AccessibilityNodeInfo checkOutNode = nodeInfo.getChild(0).getChild(0).getChild(4).getChild(1).getChild(1);
+            boolean isClick = checkOutNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
-                    LogUtils.d("$$$ 点击了下班打卡按钮" + isClick + " ");
-                } catch (Exception e) {
-                    LogUtils.d("$$$ 未找到下班打卡按钮");
-                }
-            }
-        }).start();
+            Thread.sleep(1500);
+
+            LogUtils.d("$$$ 点击了下班打卡按钮" + isClick + " ");
+        } catch (Exception e) {
+            LogUtils.d("$$$ 未找到下班打卡按钮");
+        }
     }
 
     private boolean isCheckOutSuccess(AccessibilityNodeInfo nodeInfo) {
 
         try {
             AccessibilityNodeInfo parentNode = nodeInfo.getChild(0).getChild(0);
-            if (parentNode.getChildCount() == 6) {
-                if (parentNode.getChild(5).getClassName().equals("android.app.Dialog")) {
-                    Account.setIsCheckOutToday(true, AutoPushCard.this);
-                    Operation.backToHome(this);
-                    LogUtils.d(" $$$ 自动下班打卡成功");
-                    return true;
-                }
+            if (parentNode.getChildCount() == 7) {
+                Account.setIsCheckOutToday(true, AutoPushCard.this);
+                Operation.backToHome(this);
+                LogUtils.d(" $$$ 自动下班打卡成功");
+                return true;
             }
             return false;
-
         } catch (Exception exception) {
             return false;
         }
@@ -374,6 +369,16 @@ public class AutoPushCard extends AccessibilityService {
             AccessibilityNodeInfo button = closeBtn.get(0);
             button.performAction(AccessibilityNodeInfo.ACTION_CLICK);
             recycleNodes(closeBtn);
+        }
+    }
+
+    private void closeReCheckOutDialog() {
+        List<AccessibilityNodeInfo> confirmButton = findNodeById(Constant.CONFIRM_BTN);
+        if (confirmButton != null && confirmButton.size() > 0) {
+            LogUtils.d("$$$ 发现重复下班打卡提示，执行关闭操作");
+
+            confirmButton.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            recycleNodes(confirmButton);
         }
     }
 

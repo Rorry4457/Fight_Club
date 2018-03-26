@@ -29,6 +29,7 @@ public class Constant {
 
     public static final String CLOSE_BTN = "com.alibaba.android.rimet:id/close";
     public static final String CLOSE_DIALOG = "com.alibaba.android.rimet:id/iv_dialog_close";
+    public static final String CONFIRM_BTN = "android:id/button1";
     //key
     public static final String ACCOUNT = "com.fight.club.account";
 
