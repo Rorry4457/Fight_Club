@@ -106,7 +106,7 @@ public class AutoPushCard extends AccessibilityService {
 
         try {
             AccessibilityNodeInfo parentNode = nodeInfo.getChild(0).getChild(0);
-            if (parentNode.getChildCount() == 7) {
+            if (parentNode.getChildCount() == 8) {
                 Account.setIsCheckOutToday(true, AutoPushCard.this);
                 Operation.backToHome(this);
                 LogUtils.d(" $$$ 自动下班打卡成功");

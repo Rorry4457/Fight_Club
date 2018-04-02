@@ -42,7 +42,7 @@ public class Constant {
     public static final String SHARE_PREFERENCE = "com.login.share.preference";
 
     //authWeb Address
-    public static final String AUTH_ADDREDD = "http://192.168.30.111/webAuth/";
+    public static final String AUTH_ADDREDD = "http://192.168.254.251/webAuth/";
 
     //Time
     public static final int HOUR_OF_CHECK_OUT = 17;
